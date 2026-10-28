@@ -2,14 +2,14 @@
 The audit log.
 
 Every decision your service makes gets written here as one JSON object per
-line. Not `print()` — a file you can read back.
+line. Not `print()` - a file you can read back.
 
 The reason is next unit: you run an attack against this service, and **an
 attack you can't see in a log is an attack you can't diagnose.** An input that
 slipped past your detector leaves no other trace.
 
 All nine fields the unit 8 rubric requires are in the entry shape from the
-start, even though unit 7 only fills some of them. That's deliberate — adding
+start, even though unit 7 only fills some of them. That's deliberate - adding
 fields later means your early entries and your late ones have different shapes,
 and the one you most want to compare is the one from before the change.
 
@@ -55,7 +55,7 @@ def log_decision(
     `status` moves over an item's life: `decided` when first judged,
     `under_review` once the writer appeals.
 
-    Anything extra you pass gets written too — useful for `rejected` entries in
+    Anything extra you pass gets written too - useful for `rejected` entries in
     unit 8, where there's no decision but you still want the trace.
     """
     entry = {
@@ -78,7 +78,7 @@ def log_appeal(content_id: str, creator_id: str, reasoning: str) -> dict:
     Record an appeal beside the original decision.
 
     This doesn't overwrite anything. The log is append-only, so the original
-    decision stays exactly where it was and the appeal sits after it — which is
+    decision stays exactly where it was and the appeal sits after it - which is
     the whole point of an audit log. Someone reading it later can see what was
     decided, that it was challenged, and in what order.
     """
@@ -92,9 +92,20 @@ def log_appeal(content_id: str, creator_id: str, reasoning: str) -> dict:
     })
 
 
+def log_verification(creator_id: str, granted: bool, **extra) -> dict:
+    """Record a verified-human attempt (stretch). Status is verified / not_verified."""
+    return _append({
+        "timestamp": _now(),
+        "creator_id": creator_id,
+        "event": "verification",
+        "status": "verified" if granted else "not_verified",
+        **extra,
+    })
+
+
 def log_rejection(creator_id: str, reason: str, **extra) -> dict:
     """
-    Record a request that never became a decision — a rate-limit rejection or
+    Record a request that never became a decision - a rate-limit rejection or
     an input your route refused.
 
     ⚠️ Unit 8 asks for this explicitly, and the reason is worth holding onto:
@@ -125,7 +136,7 @@ def read_entries(limit: int | None = None) -> list[dict]:
     """
     Read the log back, oldest first. `limit` keeps the most recent N.
 
-    A malformed line is skipped rather than raising — a log that can't be read
+    A malformed line is skipped rather than raising - a log that can't be read
     because of one bad row is worse than a log with a gap.
     """
     if not config.AUDIT_LOG.exists():

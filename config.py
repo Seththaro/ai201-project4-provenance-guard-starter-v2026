@@ -14,7 +14,7 @@ ROOT = Path(__file__).parent
 
 # ─── The service ─────────────────────────────────────────────────────────────
 
-# `127.0.0.1` is loopback — only your own machine can reach it, which is what
+# `127.0.0.1` is loopback - only your own machine can reach it, which is what
 # you want all through units 7 and 8. A host somewhere else has to accept
 # traffic from outside the box, and that means `0.0.0.0`. Setting the env var
 # is how you get it; the default keeps your local `curl` commands unchanged.
@@ -23,19 +23,19 @@ PORT = int(os.getenv("PORT", "5000"))
 
 # Flask's debug mode gives anyone who can reach the service an interactive
 # Python prompt inside your process. Fine on loopback, a gift to strangers
-# anywhere else — so it turns itself off the moment HOST isn't loopback.
+# anywhere else - so it turns itself off the moment HOST isn't loopback.
 DEBUG = os.getenv("AI201_DEBUG", "1") == "1" and HOST in ("127.0.0.1", "localhost")
 
 
 # ─── The local model ─────────────────────────────────────────────────────────
 # Your first signal runs a language model ON YOUR OWN MACHINE. No account, no
-# key, no card. It downloads about 550 MB the first time — do that before
+# key, no card. It downloads about 550 MB the first time - do that before
 # class, not during it.
 #
 # What it measures: how *predictable* your text is to a language model. Text a
 # model finds easy to predict tends to be text a model wrote.
 #
-# The first call is the slow one — ten to twenty seconds while the model loads,
+# The first call is the slow one - ten to twenty seconds while the model loads,
 # longer on an older laptop. After that it stays in memory and a submission
 # takes a second or two. That cost is part of what you're learning: this is
 # what running a model inline in a request actually looks like.
@@ -54,8 +54,20 @@ DETECTOR_MAX_TOKENS = 400
 # down BEFORE you code it, and to put the numbers in your README. Whatever you
 # decide, it goes here.
 
-WEIGHT_MODEL_SIGNAL = 0.5
-WEIGHT_STYLE_SIGNAL = 0.5
+# Three signals (the third is a stretch feature). They sum to 1.0.
+#   model  0.45  reads predictability - the most principled signal, but biased
+#                against plain writers, so it does not get a majority on its own
+#   style  0.35  shape of the text; cannot read, easy to fool
+#   phrase 0.20  stock-phrase / contraction habits; narrow, so it gets least
+WEIGHT_MODEL_SIGNAL = 0.45
+WEIGHT_STYLE_SIGNAL = 0.35
+WEIGHT_PHRASE_SIGNAL = 0.20
+
+# Disagreement rule. When the strongest and weakest signal are further apart
+# than DISAGREE_GAP, two methods disagreeing IS uncertainty, so the weighted
+# average is pulled DISAGREE_SHRINK of the way back toward 0.5 ("unsure").
+DISAGREE_GAP = 0.35
+DISAGREE_SHRINK = 0.5
 
 
 # ─── Thresholds (Milestone 5) ────────────────────────────────────────────────
@@ -68,14 +80,14 @@ WEIGHT_STYLE_SIGNAL = 0.5
 #
 # ⚠️ This is where your false-positive decision from Milestone 1 actually gets
 # made. Widening the unsure band means fewer wrong accusations and more AI text
-# getting through. There is no setting that avoids the trade — only settings
+# getting through. There is no setting that avoids the trade - only settings
 # that decide who pays for it.
 
 HUMAN_THRESHOLD = 0.35
-AI_THRESHOLD = 0.65
+AI_THRESHOLD = 0.70   # higher than the mirror image on purpose: a false accusation costs more
 
 # ⚠️ One thing that catches people out in Milestone 5. A weighted average can
-# only land between its two inputs — so while `style_signal` is still the stub
+# only land between its two inputs - so while `style_signal` is still the stub
 # returning 0.5, the combined score can never leave 0.25–0.75 no matter what
 # the model signal says, and the human label needs a model score below 0.20 to
 # be reachable at all.
@@ -83,6 +95,13 @@ AI_THRESHOLD = 0.65
 # If a label you can't reach is the problem, the fix is upstream of the
 # thresholds: a style signal that actually varies. `scoring.label_ranges()`
 # prints the bands; the reachable range is a different question.
+
+
+# ─── Input limits ────────────────────────────────────────────────────────────
+MIN_WORDS = 15            # fewer than this and no signal means anything
+MAX_TEXT_CHARS = 20000    # ~3,500 words; the model only reads the first 400 tokens anyway
+MAX_REASONING_CHARS = 2000
+VERIFY_MIN_WORDS = 80     # the live writing sample for the verified-human path
 
 
 # ─── Rate limiting (UNIT 8) ──────────────────────────────────────────────────
@@ -98,7 +117,7 @@ RATE_LIMIT_PER_MINUTE = 10
 RATE_LIMIT_PER_DAY = 200
 
 # Flask-Limiter warns loudly without this. In-memory is right for one laptop
-# and wrong for anything real — a restart forgets every count, and two copies
+# and wrong for anything real - a restart forgets every count, and two copies
 # of the service wouldn't share limits.
 RATE_LIMIT_STORAGE = "memory://"
 
