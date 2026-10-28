@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Provenance Guard — the web service.
+Provenance Guard - the web service.
 
     python app.py
 
@@ -11,15 +11,17 @@ Then, in another terminal:
       -d '{"message": "hello"}'
 
 That's the example route. It works right now, before you've written anything.
-**Leave it alone** — it's your control. When something breaks later, check that
+**Leave it alone** - it's your control. When something breaks later, check that
 `/ping` still answers: if it does, the problem is in your handler; if it
 doesn't, it's the service itself.
 
 Routes:
 
     POST /ping        the worked example. Already works. Don't edit it
-    POST /submit      ← YOU BUILD THIS (Milestone 3, 4, 5)
-    POST /appeal      ← YOU BUILD THIS (Milestone 5)
+    POST /submit      text in, guess + confidence + label out
+    POST /appeal      a writer pushes back; item goes to under_review
+    GET  /content/<id>  one item's current status (stretch)
+    POST /verify      earn a verified-human credential (stretch)
     GET  /log         the audit log. Already works
     GET  /health      is the service up, and is the model loaded
 """
@@ -30,11 +32,15 @@ from flask import Flask, jsonify, request
 
 import audit
 import config
+import detector
+import phrases
+import scoring
+import stylometry
 
 app = Flask(__name__)
 
 
-# ── Rate limiting — UNIT 8 ────────────────────────────────────────────────────
+# ── Rate limiting - UNIT 8 ────────────────────────────────────────────────────
 # Off until you turn it on. In unit 8, Milestone 1:
 #
 #   1. Set RATE_LIMITING_ENABLED = True in config.py (or AI201_RATE_LIMITS=1)
@@ -42,12 +48,12 @@ app = Flask(__name__)
 #   3. Uncomment the @limiter.limit(...) line on /submit below
 #
 # The order doesn't matter. While limiting is off, that decorator is a no-op
-# that quietly does nothing, so uncommenting it early costs you nothing — but
+# that quietly does nothing, so uncommenting it early costs you nothing - but
 # it also means no 429 until you've done step 1.
 #
 # The storage backend is preconfigured, which stops Flask-Limiter printing a
 # warning on every start. In-memory is right for one laptop and wrong for
-# anything real — a restart forgets every count.
+# anything real - a restart forgets every count.
 
 class _LimiterOff:
     """
@@ -72,13 +78,13 @@ if config.RATE_LIMITING_ENABLED:
         Who a request counts against.
 
         Falling back to the caller's address is the easy version. Unit 8's
-        stretch asks about per-creator limits instead — and the difference
+        stretch asks about per-creator limits instead - and the difference
         matters: one script can look like a thousand callers, and one household
         can look like one.
         """
         payload = request.get_json(silent=True)
-        # A body that parses as JSON but isn't an object — a bare list or
-        # string — has no .get. Without this guard the key function raises
+        # A body that parses as JSON but isn't an object - a bare list or
+        # string - has no .get. Without this guard the key function raises
         # BEFORE the route runs, and a malformed request becomes a 500 that
         # looks like your handler crashed when your handler never ran.
         if not isinstance(payload, dict):
@@ -148,98 +154,225 @@ def health():
     })
 
 
-# ── YOU BUILD THIS ────────────────────────────────────────────────────────────
+# ── The routes you build ──────────────────────────────────────────────────────
+
+def _error(status: int, code: str, message: str, creator_id=None):
+    """Refuse an input, leave a trace in the log, answer in JSON."""
+    audit.log_rejection(
+        creator_id=creator_id if isinstance(creator_id, str) else "unknown",
+        reason=code,
+    )
+    return jsonify({"error": code, "message": message}), status
+
+
+def _payload() -> dict:
+    """The JSON body as a dict. A bare list or string counts as empty."""
+    data = request.get_json(silent=True)
+    return data if isinstance(data, dict) else {}
+
+
+def _is_verified(creator_id: str) -> bool:
+    """Has this writer earned the verified-human credential (stretch)?"""
+    return any(
+        e.get("event") == "verification" and e.get("creator_id") == creator_id
+        and e.get("status") == "verified"
+        for e in audit.read_entries()
+    )
+
+
+def _score_text(text: str) -> dict:
+    """Run all three signals and combine. Models load once and stay loaded."""
+    model_score = detector.model_signal(text)
+    style_score = stylometry.style_signal(text)
+    phrase_score = phrases.phrase_signal(text)
+    combined = scoring.combine_signals(model_score, style_score, phrase_score)
+    guess, label = scoring.score_to_label(combined)
+    return {
+        "model_score": model_score,
+        "style_score": style_score,
+        "phrase_score": phrase_score,
+        "combined_score": combined,
+        "confidence": scoring.confidence_of(combined),
+        "guess": guess,
+        "label": label,
+    }
+
+
+def _check_text(text, creator_id, min_words):
+    """Validate text + creator_id. Returns an error response or None."""
+    if not isinstance(creator_id, str) or not creator_id.strip():
+        return _error(400, "missing_creator_id", "creator_id is required and must be a non-empty string.")
+    if not isinstance(text, str) or not text.strip():
+        return _error(400, "missing_text", "text is required and must be a non-empty string.", creator_id)
+    if len(text) > config.MAX_TEXT_CHARS:
+        return _error(413, "text_too_long",
+                      f"text is over {config.MAX_TEXT_CHARS} characters; please send a shorter piece.", creator_id)
+    if len(text.split()) < min_words:
+        return _error(422, "text_too_short",
+                      f"text needs at least {min_words} words to be checked.", creator_id)
+    return None
+
 
 @app.post("/submit")
 # @limiter.limit(f"{config.RATE_LIMIT_PER_MINUTE}/minute;{config.RATE_LIMIT_PER_DAY}/day")
 def submit():
     """
     Take a piece of text, decide about it, log the decision, answer.
-    ← TODO — Milestones 3, 4 and 5
 
-    Expects JSON:
-        {"text": "...", "creator_id": "..."}
+    Expects JSON:  {"text": "...", "creator_id": "..."}
+    Returns JSON:  content_id, guess, confidence, label, model_score,
+                   style_score, phrase_score, combined_score, status,
+                   verified_human.
 
-    Should return JSON with, at minimum:
-        {"content_id": "...", "guess": "...", "confidence": 0.0, "label": "...",
-         "model_score": 0.0, "style_score": 0.0}
-
-    ⚠️ **Both signal scores go in the response, not just the log.** Unit 8's
-    `run_attacks.py` and `run_eval.py` read `model_score` and `style_score`
-    straight off this response and put them in your reports. Leave them out and
-    every row of next unit's evidence says `null` — which is exactly the
-    diagnostic you need to name a stage and a mechanism. You do not want to
-    find that out after running the attack set.
-
-    ─────────────────────────────────────────────────────────────────────────
-    Build it in three passes. Do not skip ahead — the ordering is how you tell
-    a broken route from a broken signal.
-
-    **Milestone 3 — the route answers.**
-      1. Return a hardcoded response. Confirm `curl` gets it back before you
-         add any logic at all.
-      2. Then pull `text` and `creator_id` out of the payload.
-      3. Then call ONE signal — `detector.model_signal(text)` — and put the
-         real number in. Leave confidence and label as placeholders.
-      4. Log every submission with `audit.log_decision(...)`. The content_id
-         matters: `/appeal` needs it, and a student who skips it rebuilds this
-         whole flow later.
-
-    **Milestone 4 — the second signal and the score.**
-      5. Add `stylometry.style_signal(text)`.
-      6. Combine them with `scoring.combine_signals(...)`.
-      7. Log BOTH signal scores alongside the combined one, and put them in the
-         response too. Next unit you can't diagnose anything without them.
-
-    **Milestone 5 — the label.**
-      8. `scoring.score_to_label(...)` and put the real label in the response.
-
-    ─────────────────────────────────────────────────────────────────────────
-    Worth deciding early, because unit 8's attack set will decide it for you:
-    what should this do when `text` is missing, empty, or enormous? A crash on
-    a malformed input is one of the most common real failures there is.
+    Bad input (missing/empty/non-string text, missing creator_id, under
+    MIN_WORDS, over MAX_TEXT_CHARS) is refused with 400/413/422 and logged as
+    a rejection; it never reaches a signal.
     """
-    payload = request.get_json(silent=True) or {}
+    data = _payload()
+    text, creator_id = data.get("text"), data.get("creator_id")
 
-    # TODO: delete this and build the route.
+    problem = _check_text(text, creator_id, config.MIN_WORDS)
+    if problem:
+        return problem
+
+    try:
+        result = _score_text(text)
+    except detector.DetectorUnavailable as exc:
+        return _error(503, "detector_unavailable", str(exc).splitlines()[0], creator_id)
+
+    verified = _is_verified(creator_id)
+    if verified:
+        result["label"] += " This writer holds a verified-human credential."
+        if result["guess"] == "ai":
+            # A credentialed writer is never auto-labelled high-confidence AI;
+            # the item is downgraded to "unsure" instead.
+            result["guess"], result["label"] = "unsure", scoring.LABELS["unsure"] + (
+                " This writer holds a verified-human credential.")
+
+    content_id = uuid.uuid4().hex[:12]
+    audit.log_decision(
+        content_id=content_id,
+        creator_id=creator_id,
+        guess=result["guess"],
+        model_score=result["model_score"],
+        style_score=result["style_score"],
+        combined_score=result["combined_score"],
+        label=result["label"],
+        status="decided",
+        phrase_score=result["phrase_score"],
+        confidence=result["confidence"],
+        verified_human=verified,
+        word_count=len(text.split()),
+    )
+
     return jsonify({
-        "error": "not_implemented",
-        "message": "POST /submit isn't built yet — see the TODO in app.py.",
-        "you_sent": {
-            "text_length": len(payload.get("text", "")),
-            "creator_id": payload.get("creator_id"),
-        },
-    }), 501
+        "content_id": content_id,
+        "guess": result["guess"],
+        "confidence": result["confidence"],
+        "label": result["label"],
+        "model_score": result["model_score"],
+        "style_score": result["style_score"],
+        "phrase_score": result["phrase_score"],
+        "combined_score": result["combined_score"],
+        "verified_human": verified,
+        "status": "decided",
+    })
 
 
 @app.post("/appeal")
 def appeal():
     """
-    A writer says you got it wrong. ← TODO — Milestone 5
+    A writer says we got it wrong.
 
-    Expects JSON:
-        {"content_id": "...", "reasoning": "..."}
-
-    Should:
-      1. Check the content_id actually exists — `audit.entries_for(id)` tells
-         you. A typo here fails silently and looks like a broken endpoint,
-         which is the single most common way this milestone eats an hour.
-      2. Record the appeal with `audit.log_appeal(...)`, which moves the item
-         to `under_review`.
-      3. Confirm to the writer. No automatic re-checking needed.
-
-    This is the smallest endpoint in the project and the one that matters most
-    to the person on the other end. It's the only thing standing between a
-    wrong accusation and nothing at all.
+    Expects JSON:  {"content_id": "...", "reasoning": "..."}
+    Records the appeal beside the original decision, moves the item to
+    under_review, and confirms. No automatic re-checking.
     """
-    payload = request.get_json(silent=True) or {}
+    data = _payload()
+    content_id, reasoning = data.get("content_id"), data.get("reasoning")
 
-    # TODO: delete this and build the route.
+    if not isinstance(content_id, str) or not content_id.strip():
+        return _error(400, "missing_content_id", "content_id is required.")
+    if not isinstance(reasoning, str) or not reasoning.strip():
+        return _error(400, "missing_reasoning", "Please tell us why you think this was wrong.")
+    if len(reasoning) > config.MAX_REASONING_CHARS:
+        return _error(413, "reasoning_too_long",
+                      f"reasoning is over {config.MAX_REASONING_CHARS} characters.")
+
+    decisions = [e for e in audit.entries_for(content_id) if e.get("event") is None]
+    if not decisions:
+        return _error(404, "unknown_content_id", f"No submission found with content_id '{content_id}'.")
+
+    audit.log_appeal(content_id, decisions[0]["creator_id"], reasoning.strip())
     return jsonify({
-        "error": "not_implemented",
-        "message": "POST /appeal isn't built yet — see the TODO in app.py.",
-        "you_sent": payload,
-    }), 501
+        "content_id": content_id,
+        "status": "under_review",
+        "message": "Thank you. Your appeal has been recorded and a person will review it.",
+    })
+
+
+@app.get("/content/<content_id>")
+def get_content(content_id):
+    """Current status of one item (stretch): decision, status, appeals."""
+    entries = audit.entries_for(content_id)
+    decisions = [e for e in entries if e.get("event") is None]
+    if not decisions:
+        return jsonify({"error": "unknown_content_id",
+                        "message": f"No submission found with content_id '{content_id}'."}), 404
+    d = decisions[0]
+    appeals = [e for e in entries if e.get("event") == "appeal"]
+    return jsonify({
+        "content_id": content_id,
+        "creator_id": d["creator_id"],
+        "guess": d["guess"],
+        "combined_score": d["combined_score"],
+        "verified_human": d.get("verified_human", False),
+        "status": entries[-1]["status"],
+        "appeals": [{"timestamp": a["timestamp"], "reasoning": a["reasoning"]} for a in appeals],
+    })
+
+
+@app.post("/verify")
+def verify():
+    """
+    Verified-human path (stretch). The extra step: the writer sends a fresh
+    writing sample of at least VERIFY_MIN_WORDS words, written on the spot.
+    If our checks don't call it high-confidence AI, the writer earns the
+    credential, and it shows on every later submission and in GET /content.
+
+    Expects JSON:  {"creator_id": "...", "sample": "..."}
+    """
+    data = _payload()
+    creator_id, sample = data.get("creator_id"), data.get("sample")
+
+    problem = _check_text(sample, creator_id, config.VERIFY_MIN_WORDS)
+    if problem:
+        return problem
+
+    try:
+        result = _score_text(sample)
+    except detector.DetectorUnavailable as exc:
+        return _error(503, "detector_unavailable", str(exc).splitlines()[0], creator_id)
+
+    granted = result["guess"] != "ai"
+    audit.log_verification(
+        creator_id=creator_id,
+        granted=granted,
+        combined_score=result["combined_score"],
+        guess=result["guess"],
+    )
+    if not granted:
+        return jsonify({
+            "creator_id": creator_id,
+            "verified_human": False,
+            "message": "We couldn't verify this sample automatically. Try a longer, more personal "
+                       "sample, or contact a reviewer.",
+        }), 200
+    return jsonify({
+        "creator_id": creator_id,
+        "verified_human": True,
+        "message": "You now hold a verified-human credential. It will show on your future work.",
+    })
 
 
 # ── Already works ─────────────────────────────────────────────────────────────
@@ -270,7 +403,7 @@ def main():
     print('    -H "Content-Type: application/json" \\')
     print("    -d '{\"message\": \"hello\"}'")
     print()
-    # debug=True hands out an interactive debugger, so it's local-only — see config.py
+    # debug=True hands out an interactive debugger, so it's local-only - see config.py
     app.run(host=config.HOST, port=config.PORT, debug=config.DEBUG)
 
 
