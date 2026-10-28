@@ -1,4 +1,4 @@
-# Acceptance criteria — Provenance Guard
+# Acceptance criteria - Provenance Guard
 
 Five criteria that say what "working" means for this service, written in unit 7
 **before** you built it.
@@ -6,7 +6,7 @@ Five criteria that say what "working" means for this service, written in unit 7
 **All five are yours.** None are given.
 
 An acceptance criterion names a number or something plainly observable. *"The
-detector is accurate"* is an opinion — and perfect AI detection isn't possible
+detector is accurate"* is an opinion - and perfect AI detection isn't possible
 anyway, so it's an opinion about something nobody can deliver. *"Of 10 pieces I
 wrote myself, at most 1 is labelled high-confidence AI"* is a criterion.
 
@@ -42,68 +42,85 @@ Two things worth knowing before you pick numbers:
   a **miss**.
 
 ---
-## 1.
+## 1. False positives: at most 1 in 10 human pieces is labelled high-confidence AI
 
-<!-- Your criterion. It must name a number. -->
+Test set: 10 pieces of human writing, at least 4 of them deliberately plain
+(short sentences, common words, the style of a younger or second-language
+writer). Submit each through `POST /submit`. **At most 1 of the 10 comes back
+with `guess: "ai"`, and none of the 4 plain ones do.** The target has to hold in
+each of 3 separate runs.
 
-
-
-**Why this target:**
-
-
-
----
-
-## 2.
-
-<!-- Your criterion. -->
-
-
-
-**Why this target:**
-
-
+**Why this target:** On a writing site a wrong accusation costs one person a
+lot and a missed detection costs the site a little, so this is the strictest
+target I have. Signal one (`detector.py`, perplexity) scores plain writing as
+machine-like, so the plain pieces are exactly where my system is most likely to
+accuse the wrong person; I will not let them hide inside an average.
 
 ---
 
-## 3.
+## 2. Score spread: clearly-AI text averages at least 0.30 above clearly-human text
 
-<!-- Your criterion. -->
+Test set: 5 pieces I am sure are AI-generated and 5 I am sure a person wrote.
+Take the mean `combined_score` of each group from the `/submit` response. **Mean
+of the AI group minus mean of the human group is at least 0.30**, in each of 3
+runs.
 
-
-
-**Why this target:**
-
-
-
----
-
-## 4.
-
-<!-- Your criterion. -->
-
-
-
-**Why this target:**
-
-
+**Why this target:** If the two groups sit closer than 0.30, the thresholds
+(0.35 and 0.70) cannot separate them and the labels are decoration. 0.30 is
+not trivial: both signals are weak on short text, so I expect to be near the
+edge. I'd rather miss a real target than hit an easy one.
 
 ---
 
-## 5.
+## 3. Label coverage: all three labels are reachable and no score falls in a gap
 
-<!-- Your criterion. -->
+Two checks. (a) Calling `scoring.score_to_label` on every score from 0.00 to
+1.00 in steps of 0.01 returns exactly one of `human`, `unsure`, `ai` for all 101
+values, and each of the three is returned at least once. (b) Over a set of at
+least 20 real submissions through `POST /submit`, **all three** `guess` values
+appear at least once, and at least 3 of them are `unsure`.
 
+**Why this target:** An "unsure" label nobody can reach would turn the
+system into the 0.5 coin flip the brief warns about, and a "human" label that
+can't be reached means the system can only accuse or shrug. My style signal
+could only compress scores toward 0.5 if it didn't vary, so (b) tests that it
+does.
 
+---
 
-**Why this target:**
+## 4. Appeal path: 10 of 10 appeals change status and are recorded; unknown ids change nothing
 
+Take 10 content_ids from earlier submissions and `POST /appeal` each with a
+reason. **All 10 return HTTP 200 and `"status": "under_review"`, and for all 10
+`GET /log` shows an `event: "appeal"` entry with the same `content_id` and the
+reasoning text.** Then send 3 appeals with made-up content_ids: **all 3 return
+404 and add no `under_review` entry** to the log.
 
+**Why this target:** The appeal is the only thing between a wrong accusation and
+nothing at all, so it should be 10 of 10, not 9 of 10. The unknown-id case
+matters because a typo that silently "succeeds" would tell a real writer their
+appeal was received when it was not.
+
+---
+
+## 5. Bad input: 8 malformed requests get a 4xx JSON error, never a 500, and the service stays up
+
+Send these to `POST /submit`: no `text` field; `text` empty; `text` of only
+whitespace; `text` a number; `text` of 14 words; `text` of 25,000 characters;
+no `creator_id`; a body that is a JSON list. **All 8 return a 400, 413 or 422
+with a JSON `error` field, none returns 500, each leaves a `rejected` entry in
+the log, and `POST /ping` still answers 200 afterwards.**
+
+**Why this target:** A crash on malformed input is one of the most common real
+failures, and the text limits protect the model-loading path: a 25,000
+character body should be refused before it reaches a model that only reads 400
+tokens. Under 15 words no signal is meaningful, so a verdict there would be
+invented.
 
 ---
 
 <!-- ─────────────────────────────────────────────────────────────────────────
-     UNIT 8 — read this before you change anything above.
+     UNIT 8 - read this before you change anything above.
 
      If a criterion turns out to be BROKEN rather than merely unmet, you can
      revise it, and that earns credit. But never delete or edit the original
