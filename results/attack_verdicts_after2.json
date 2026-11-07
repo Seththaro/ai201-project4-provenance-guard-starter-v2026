@@ -1,0 +1,582 @@
+[
+ {
+  "id": "AI01",
+  "family": "baseline_ai",
+  "status": 200,
+  "guess": "unsure",
+  "combined": 0.5974,
+  "verdict": "BROKE",
+  "why": "AI text got through as `unsure`",
+  "content_id": "aafae5696b0c"
+ },
+ {
+  "id": "AI02",
+  "family": "baseline_ai",
+  "status": 200,
+  "guess": "unsure",
+  "combined": 0.6398,
+  "verdict": "BROKE",
+  "why": "AI text got through as `unsure`",
+  "content_id": "c6bd0d73e7b3"
+ },
+ {
+  "id": "AI03",
+  "family": "baseline_ai",
+  "status": 200,
+  "guess": "unsure",
+  "combined": 0.5873,
+  "verdict": "BROKE",
+  "why": "AI text got through as `unsure`",
+  "content_id": "0d69a254d98e"
+ },
+ {
+  "id": "EV01",
+  "family": "evasion",
+  "status": 200,
+  "guess": "unsure",
+  "combined": 0.4223,
+  "verdict": "BROKE",
+  "why": "AI text got through as `unsure`",
+  "content_id": "352ae606dc98"
+ },
+ {
+  "id": "EV02",
+  "family": "evasion",
+  "status": 200,
+  "guess": "unsure",
+  "combined": 0.4773,
+  "verdict": "BROKE",
+  "why": "AI text got through as `unsure`",
+  "content_id": "9a863aa3274c"
+ },
+ {
+  "id": "EV03",
+  "family": "evasion",
+  "status": 200,
+  "guess": "unsure",
+  "combined": 0.4022,
+  "verdict": "BROKE",
+  "why": "AI text got through as `unsure`",
+  "content_id": "88a40b2b97de"
+ },
+ {
+  "id": "EV04",
+  "family": "evasion",
+  "status": 200,
+  "guess": "unsure",
+  "combined": 0.4549,
+  "verdict": "BROKE",
+  "why": "AI text got through as `unsure`",
+  "content_id": "f02ab058e5ac"
+ },
+ {
+  "id": "EV05",
+  "family": "evasion",
+  "status": 200,
+  "guess": "unsure",
+  "combined": 0.5364,
+  "verdict": "BROKE",
+  "why": "AI text got through as `unsure`",
+  "content_id": "344dbcbb9ffd"
+ },
+ {
+  "id": "EV06",
+  "family": "evasion",
+  "status": 200,
+  "guess": "unsure",
+  "combined": 0.6053,
+  "verdict": "BROKE",
+  "why": "AI text got through as `unsure`",
+  "content_id": "dac5f334bd64"
+ },
+ {
+  "id": "EV07",
+  "family": "evasion",
+  "status": 200,
+  "guess": "unsure",
+  "combined": 0.4645,
+  "verdict": "BROKE",
+  "why": "AI text got through as `unsure`",
+  "content_id": "16947d301799"
+ },
+ {
+  "id": "EV08",
+  "family": "evasion",
+  "status": 200,
+  "guess": "unsure",
+  "combined": 0.4332,
+  "verdict": "BROKE",
+  "why": "AI text got through as `unsure`",
+  "content_id": "b06de105af25"
+ },
+ {
+  "id": "FP01",
+  "family": "false_positive",
+  "status": 200,
+  "guess": "unsure",
+  "combined": 0.5902,
+  "verdict": "HELD",
+  "why": "not accused (`unsure`)",
+  "content_id": "0e79a954a63e"
+ },
+ {
+  "id": "FP02",
+  "family": "false_positive",
+  "status": 200,
+  "guess": "unsure",
+  "combined": 0.6152,
+  "verdict": "HELD",
+  "why": "not accused (`unsure`)",
+  "content_id": "55b3018ce5da"
+ },
+ {
+  "id": "FP03",
+  "family": "false_positive",
+  "status": 200,
+  "guess": "unsure",
+  "combined": 0.5782,
+  "verdict": "HELD",
+  "why": "not accused (`unsure`)",
+  "content_id": "5fe1cdd8e810"
+ },
+ {
+  "id": "FP04",
+  "family": "false_positive",
+  "status": 200,
+  "guess": "unsure",
+  "combined": 0.602,
+  "verdict": "HELD",
+  "why": "not accused (`unsure`)",
+  "content_id": "19333deb7d1b"
+ },
+ {
+  "id": "FP05",
+  "family": "false_positive",
+  "status": 200,
+  "guess": "unsure",
+  "combined": 0.5527,
+  "verdict": "HELD",
+  "why": "not accused (`unsure`)",
+  "content_id": "fc931b2c36ce"
+ },
+ {
+  "id": "FP06",
+  "family": "false_positive",
+  "status": 200,
+  "guess": "unsure",
+  "combined": 0.5924,
+  "verdict": "HELD",
+  "why": "not accused (`unsure`)",
+  "content_id": "3b514508f43c"
+ },
+ {
+  "id": "FP07",
+  "family": "false_positive",
+  "status": 200,
+  "guess": "unsure",
+  "combined": 0.6552,
+  "verdict": "HELD",
+  "why": "not accused (`unsure`)",
+  "content_id": "02f4bce5be45"
+ },
+ {
+  "id": "PI01",
+  "family": "prompt_injection",
+  "status": 200,
+  "guess": "unsure",
+  "combined": 0.6413,
+  "verdict": "HELD",
+  "why": "same guess as AI01, combined moved +0.044",
+  "content_id": "461ce5d92369"
+ },
+ {
+  "id": "PI02",
+  "family": "prompt_injection",
+  "status": 200,
+  "guess": "unsure",
+  "combined": 0.6027,
+  "verdict": "HELD",
+  "why": "same guess as AI02, combined moved -0.037",
+  "content_id": "42037152098d"
+ },
+ {
+  "id": "PI03",
+  "family": "prompt_injection",
+  "status": 200,
+  "guess": "unsure",
+  "combined": 0.4912,
+  "verdict": "HELD",
+  "why": "same guess as AI03, combined moved -0.096",
+  "content_id": "74041a7bcd86"
+ },
+ {
+  "id": "PI04",
+  "family": "prompt_injection",
+  "status": 200,
+  "guess": "unsure",
+  "combined": 0.4787,
+  "verdict": "BROKE",
+  "why": "guess unsure -> unsure, combined moved -0.123 vs FP04",
+  "content_id": "e68152e30cda"
+ },
+ {
+  "id": "PI05",
+  "family": "prompt_injection",
+  "status": 200,
+  "guess": "unsure",
+  "combined": 0.4898,
+  "verdict": "HELD",
+  "why": "same guess as FP05, combined moved -0.063",
+  "content_id": "cec8a21857f5"
+ },
+ {
+  "id": "JK01",
+  "family": "junk",
+  "status": 200,
+  "guess": "unsure",
+  "combined": 0.6106,
+  "verdict": "HELD",
+  "why": "answered unsure",
+  "content_id": "1b96de91cf87"
+ },
+ {
+  "id": "JK02",
+  "family": "junk",
+  "status": 200,
+  "guess": "unsure",
+  "combined": 0.6097,
+  "verdict": "HELD",
+  "why": "answered unsure",
+  "content_id": "0f59793426c3"
+ },
+ {
+  "id": "JK03",
+  "family": "junk",
+  "status": 200,
+  "guess": "unsure",
+  "combined": 0.5237,
+  "verdict": "HELD",
+  "why": "not accused (`unsure`)",
+  "content_id": "6994ee6e665e"
+ },
+ {
+  "id": "JK04",
+  "family": "junk",
+  "status": 200,
+  "guess": "unsure",
+  "combined": 0.4199,
+  "verdict": "HELD",
+  "why": "answered unsure",
+  "content_id": "b328b5c0813c"
+ },
+ {
+  "id": "JK05",
+  "family": "junk",
+  "status": 200,
+  "guess": "unsure",
+  "combined": 0.5595,
+  "verdict": "HELD",
+  "why": "answered unsure",
+  "content_id": "94fc939cd7e8"
+ },
+ {
+  "id": "JK06",
+  "family": "junk",
+  "status": 200,
+  "guess": "unsure",
+  "combined": 0.5415,
+  "verdict": "HELD",
+  "why": "answered unsure",
+  "content_id": "5a35ce267999"
+ },
+ {
+  "id": "JK07",
+  "family": "junk",
+  "status": 422,
+  "guess": null,
+  "combined": null,
+  "verdict": "HELD",
+  "why": "refused 422",
+  "content_id": null
+ },
+ {
+  "id": "JK08",
+  "family": "junk",
+  "status": 200,
+  "guess": "unsure",
+  "combined": 0.5575,
+  "verdict": "HELD",
+  "why": "answered unsure",
+  "content_id": "a4454574a065"
+ },
+ {
+  "id": "JK09",
+  "family": "junk",
+  "status": 200,
+  "guess": "unsure",
+  "combined": 0.5543,
+  "verdict": "HELD",
+  "why": "answered unsure",
+  "content_id": "78e0c07ce22d"
+ },
+ {
+  "id": "JK10",
+  "family": "junk",
+  "status": 200,
+  "guess": "unsure",
+  "combined": 0.6106,
+  "verdict": "HELD",
+  "why": "answered unsure",
+  "content_id": "ea39fd4e5f00"
+ },
+ {
+  "id": "MR01",
+  "family": "malformed",
+  "status": 400,
+  "guess": null,
+  "combined": null,
+  "verdict": "HELD",
+  "why": "refused 400",
+  "content_id": null
+ },
+ {
+  "id": "MR02",
+  "family": "malformed",
+  "status": 400,
+  "guess": null,
+  "combined": null,
+  "verdict": "HELD",
+  "why": "refused 400",
+  "content_id": null
+ },
+ {
+  "id": "MR03",
+  "family": "malformed",
+  "status": 400,
+  "guess": null,
+  "combined": null,
+  "verdict": "HELD",
+  "why": "refused 400",
+  "content_id": null
+ },
+ {
+  "id": "MR04",
+  "family": "malformed",
+  "status": 400,
+  "guess": null,
+  "combined": null,
+  "verdict": "HELD",
+  "why": "refused 400",
+  "content_id": null
+ },
+ {
+  "id": "MR05",
+  "family": "malformed",
+  "status": 400,
+  "guess": null,
+  "combined": null,
+  "verdict": "HELD",
+  "why": "refused 400",
+  "content_id": null
+ },
+ {
+  "id": "MR06",
+  "family": "malformed",
+  "status": 400,
+  "guess": null,
+  "combined": null,
+  "verdict": "HELD",
+  "why": "refused 400",
+  "content_id": null
+ },
+ {
+  "id": "MR07",
+  "family": "malformed",
+  "status": 400,
+  "guess": null,
+  "combined": null,
+  "verdict": "HELD",
+  "why": "refused 400",
+  "content_id": null
+ },
+ {
+  "id": "MR08",
+  "family": "malformed",
+  "status": 400,
+  "guess": null,
+  "combined": null,
+  "verdict": "HELD",
+  "why": "refused 400",
+  "content_id": null
+ },
+ {
+  "id": "MR09",
+  "family": "malformed",
+  "status": 400,
+  "guess": null,
+  "combined": null,
+  "verdict": "HELD",
+  "why": "refused 400",
+  "content_id": null
+ },
+ {
+  "id": "MR10",
+  "family": "malformed",
+  "status": 400,
+  "guess": null,
+  "combined": null,
+  "verdict": "HELD",
+  "why": "refused 400",
+  "content_id": null
+ },
+ {
+  "id": "MR11",
+  "family": "malformed",
+  "status": 200,
+  "guess": "unsure",
+  "combined": 0.654,
+  "verdict": "HELD",
+  "why": "accepted and judged",
+  "content_id": "8efd21956337"
+ },
+ {
+  "id": "MR12",
+  "family": "malformed",
+  "status": 413,
+  "guess": null,
+  "combined": null,
+  "verdict": "HELD",
+  "why": "refused 413",
+  "content_id": null
+ },
+ {
+  "id": "MR13",
+  "family": "malformed",
+  "status": 200,
+  "guess": "human",
+  "combined": 0.3097,
+  "verdict": "HELD",
+  "why": "accepted and judged",
+  "content_id": "89d8835dc01d"
+ },
+ {
+  "id": "FL01",
+  "family": "flood_same_creator",
+  "status": 200,
+  "guess": "human",
+  "combined": 0.3483,
+  "verdict": "HELD",
+  "why": "within the limit",
+  "content_id": "113704f39539"
+ },
+ {
+  "id": "FL02",
+  "family": "flood_same_creator",
+  "status": 200,
+  "guess": "human",
+  "combined": 0.3483,
+  "verdict": "HELD",
+  "why": "within the limit",
+  "content_id": "eabaf7871a3f"
+ },
+ {
+  "id": "FL03",
+  "family": "flood_same_creator",
+  "status": 200,
+  "guess": "human",
+  "combined": 0.3483,
+  "verdict": "HELD",
+  "why": "within the limit",
+  "content_id": "0fce30c6f6f1"
+ },
+ {
+  "id": "FL04",
+  "family": "flood_same_creator",
+  "status": 200,
+  "guess": "human",
+  "combined": 0.3483,
+  "verdict": "HELD",
+  "why": "within the limit",
+  "content_id": "9e68eb75277d"
+ },
+ {
+  "id": "FL05",
+  "family": "flood_same_creator",
+  "status": 200,
+  "guess": "human",
+  "combined": 0.3483,
+  "verdict": "HELD",
+  "why": "within the limit",
+  "content_id": "68988d9e00e4"
+ },
+ {
+  "id": "FL06",
+  "family": "flood_same_creator",
+  "status": 429,
+  "guess": null,
+  "combined": null,
+  "verdict": "HELD",
+  "why": "rate limited",
+  "content_id": null
+ },
+ {
+  "id": "FL07",
+  "family": "flood_same_creator",
+  "status": 429,
+  "guess": null,
+  "combined": null,
+  "verdict": "HELD",
+  "why": "rate limited",
+  "content_id": null
+ },
+ {
+  "id": "FL08",
+  "family": "flood_same_creator",
+  "status": 429,
+  "guess": null,
+  "combined": null,
+  "verdict": "HELD",
+  "why": "rate limited",
+  "content_id": null
+ },
+ {
+  "id": "FL09",
+  "family": "flood_same_creator",
+  "status": 429,
+  "guess": null,
+  "combined": null,
+  "verdict": "HELD",
+  "why": "rate limited",
+  "content_id": null
+ },
+ {
+  "id": "FL10",
+  "family": "flood_same_creator",
+  "status": 429,
+  "guess": null,
+  "combined": null,
+  "verdict": "HELD",
+  "why": "rate limited",
+  "content_id": null
+ },
+ {
+  "id": "FL11",
+  "family": "flood_same_creator",
+  "status": 429,
+  "guess": null,
+  "combined": null,
+  "verdict": "HELD",
+  "why": "rate limited",
+  "content_id": null
+ },
+ {
+  "id": "FL12",
+  "family": "flood_same_creator",
+  "status": 429,
+  "guess": null,
+  "combined": null,
+  "verdict": "HELD",
+  "why": "rate limited",
+  "content_id": null
+ }
+]
