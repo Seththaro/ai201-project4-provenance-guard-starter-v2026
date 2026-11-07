@@ -202,6 +202,16 @@ def _check_text(text, creator_id, min_words):
     """Validate text + creator_id. Returns an error response or None."""
     if not isinstance(creator_id, str) or not creator_id.strip():
         return _error(400, "missing_creator_id", "creator_id is required and must be a non-empty string.")
+    # creator_id is a log field and a rate-limit key, so it must be short and
+    # writable as UTF-8 before anything else touches it. It is passed to _error
+    # as None because logging the bad value itself is what crashed the route.
+    if len(creator_id) > config.MAX_CREATOR_ID_CHARS:
+        return _error(400, "creator_id_too_long",
+                      f"creator_id is over {config.MAX_CREATOR_ID_CHARS} characters.")
+    try:
+        creator_id.encode("utf-8")
+    except UnicodeEncodeError:
+        return _error(400, "invalid_creator_id", "creator_id contains characters that cannot be stored.")
     if not isinstance(text, str) or not text.strip():
         return _error(400, "missing_text", "text is required and must be a non-empty string.", creator_id)
     if len(text) > config.MAX_TEXT_CHARS:
@@ -214,7 +224,11 @@ def _check_text(text, creator_id, min_words):
 
 
 @app.post("/submit")
-# @limiter.limit(f"{config.RATE_LIMIT_PER_MINUTE}/minute;{config.RATE_LIMIT_PER_DAY}/day")
+# Unit 8 improvement 2: only requests that were accepted count against the limit.
+# A refused request (a 4xx) costs almost nothing to answer, and before this change
+# every request with no usable creator_id shared one per-address bucket, so a few
+# malformed requests locked out the next ones with a 429 before _check_text ran.
+@limiter.limit(f"{config.RATE_LIMIT_PER_MINUTE}/minute;{config.RATE_LIMIT_PER_DAY}/day", deduct_when=lambda response: response.status_code < 400)
 def submit():
     """
     Take a piece of text, decide about it, log the decision, answer.

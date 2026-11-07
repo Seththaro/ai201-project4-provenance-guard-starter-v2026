@@ -101,6 +101,7 @@ AI_THRESHOLD = 0.70   # higher than the mirror image on purpose: a false accusat
 MIN_WORDS = 15            # fewer than this and no signal means anything
 MAX_TEXT_CHARS = 20000    # ~3,500 words; the model only reads the first 400 tokens anyway
 MAX_REASONING_CHARS = 2000
+MAX_CREATOR_ID_CHARS = 100   # unit 8 improvement 1: a creator_id is a log field and a rate-limit key
 VERIFY_MIN_WORDS = 80     # the live writing sample for the verified-human path
 
 
@@ -111,10 +112,13 @@ VERIFY_MIN_WORDS = 80     # the live writing sample for the verified-human path
 # an hour, and a script sending a thousand variations to map your thresholds.
 # Your README has to say why your numbers and not others.
 
-RATE_LIMITING_ENABLED = os.getenv("AI201_RATE_LIMITS", "0") == "1"
+RATE_LIMITING_ENABLED = os.getenv("AI201_RATE_LIMITS", "1") == "1"
 
-RATE_LIMIT_PER_MINUTE = 10
-RATE_LIMIT_PER_DAY = 200
+# Per creator_id (see rate_limit_key in app.py). 5 a minute is a burst a real
+# writer can reach by pasting a few pieces in a row; 50 a day is more than one
+# person writes. A script probing thresholds gets 50 probes a day per creator_id.
+RATE_LIMIT_PER_MINUTE = 5
+RATE_LIMIT_PER_DAY = 50
 
 # Flask-Limiter warns loudly without this. In-memory is right for one laptop
 # and wrong for anything real - a restart forgets every count, and two copies
