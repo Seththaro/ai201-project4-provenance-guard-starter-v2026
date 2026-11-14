@@ -1,0 +1,1854 @@
+{
+ "label": "before",
+ "warmup": "0",
+ "trials": [
+  {
+   "trial": 1,
+   "c2": {
+    "health_after_s": 0.5,
+    "first_submit_ms": 4739.2,
+    "status": 200,
+    "pass": true,
+    "record": {
+     "timestamp": "2026-11-14T15:25:05+00:00",
+     "request_id": "d3c5041635e3",
+     "method": "POST",
+     "route": "/submit",
+     "status": 200,
+     "input": {
+      "creator_id": "bef1_cold",
+      "text_chars": 496,
+      "text_words": 91,
+      "text_preview": "Four score and seven years ago our fathers brought forth on "
+     },
+     "output": {
+      "content_id": "ee1203a6f9c4",
+      "guess": "unsure",
+      "label": "We can't tell for certain whether this was written by a pers",
+      "combined_score": 0.5945,
+      "status": "decided"
+     },
+     "duration_ms": 4739.2,
+     "cpu_ms": 7312.5,
+     "stage_ms": {
+      "model": 4729.7,
+      "style": 1.2,
+      "phrase": 0.1,
+      "combine": 0.0
+     },
+     "error": null
+    }
+   },
+   "c3": {
+    "p95_ms": 313.5,
+    "median_ms": 216.1,
+    "max_ms": 328.8,
+    "ok": 20,
+    "pass": true
+   },
+   "_lat_rows": [
+    {
+     "duration_ms": 225.5,
+     "cpu_ms": 2531.2,
+     "stage_ms": {
+      "model": 205.3,
+      "style": 0.3,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 202.0,
+     "cpu_ms": 2421.9,
+     "stage_ms": {
+      "model": 181.7,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 207.9,
+     "cpu_ms": 2453.1,
+     "stage_ms": {
+      "model": 187.2,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 212.9,
+     "cpu_ms": 2703.1,
+     "stage_ms": {
+      "model": 193.2,
+      "style": 0.3,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 207.3,
+     "cpu_ms": 2531.2,
+     "stage_ms": {
+      "model": 186.0,
+      "style": 0.3,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 183.5,
+     "cpu_ms": 2218.8,
+     "stage_ms": {
+      "model": 164.0,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 231.0,
+     "cpu_ms": 2718.8,
+     "stage_ms": {
+      "model": 206.5,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 205.5,
+     "cpu_ms": 2609.4,
+     "stage_ms": {
+      "model": 185.9,
+      "style": 0.3,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 199.3,
+     "cpu_ms": 2296.9,
+     "stage_ms": {
+      "model": 178.1,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 233.1,
+     "cpu_ms": 2828.1,
+     "stage_ms": {
+      "model": 211.5,
+      "style": 0.3,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 188.5,
+     "cpu_ms": 2375.0,
+     "stage_ms": {
+      "model": 165.0,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 213.5,
+     "cpu_ms": 2296.9,
+     "stage_ms": {
+      "model": 193.4,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 328.8,
+     "cpu_ms": 2750.0,
+     "stage_ms": {
+      "model": 307.6,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 251.4,
+     "cpu_ms": 2921.9,
+     "stage_ms": {
+      "model": 225.8,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 204.7,
+     "cpu_ms": 2343.8,
+     "stage_ms": {
+      "model": 183.5,
+      "style": 0.3,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 234.1,
+     "cpu_ms": 2703.1,
+     "stage_ms": {
+      "model": 213.2,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 313.5,
+     "cpu_ms": 2453.1,
+     "stage_ms": {
+      "model": 285.0,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 216.1,
+     "cpu_ms": 2250.0,
+     "stage_ms": {
+      "model": 192.4,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 249.5,
+     "cpu_ms": 2625.0,
+     "stage_ms": {
+      "model": 224.9,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 240.9,
+     "cpu_ms": 2515.6,
+     "stage_ms": {
+      "model": 217.9,
+      "style": 0.5,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    }
+   ],
+   "c5": {
+    "a_ok": 10,
+    "b_ok": 9,
+    "both": 9,
+    "pass": false,
+    "mean_duration_ms": 242.4,
+    "mean_cpu_ms": 2414.1,
+    "rss_mb": null,
+    "sample": [
+     {
+      "timestamp": "2026-11-14T15:25:10+00:00",
+      "request_id": "46134c0c2f82",
+      "method": "POST",
+      "route": "/submit",
+      "status": 200,
+      "input": {
+       "creator_id": "bef1_f0",
+       "text_chars": 496,
+       "text_words": 91,
+       "text_preview": "Four score and seven years ago our fathers brought forth on "
+      },
+      "output": {
+       "content_id": "81c8569a2a96",
+       "guess": "unsure",
+       "label": "We can't tell for certain whether this was written by a pers",
+       "combined_score": 0.5945,
+       "status": "decided"
+      },
+      "duration_ms": 265.1,
+      "cpu_ms": 2546.9,
+      "stage_ms": {
+       "model": 234.0,
+       "style": 0.6,
+       "phrase": 0.1,
+       "combine": 0.0
+      },
+      "error": null
+     },
+     {
+      "timestamp": "2026-11-14T15:25:11+00:00",
+      "request_id": "8b8c642a0dda",
+      "method": "POST",
+      "route": "/submit",
+      "status": 200,
+      "input": {
+       "creator_id": "bef1_f1",
+       "text_chars": 533,
+       "text_words": 110,
+       "text_preview": "I went to the woods because I wished to live deliberately, t"
+      },
+      "output": {
+       "content_id": "7d2bac4a14ef",
+       "guess": "unsure",
+       "label": "We can't tell for certain whether this was written by a pers",
+       "combined_score": 0.6038,
+       "status": "decided"
+      },
+      "duration_ms": 401.3,
+      "cpu_ms": 2812.5,
+      "stage_ms": {
+       "model": 385.6,
+       "style": 0.5,
+       "phrase": 0.1,
+       "combine": 0.0
+      },
+      "error": null
+     }
+    ]
+   },
+   "_fid_rows": [
+    {
+     "duration_ms": 265.1,
+     "cpu_ms": 2546.9,
+     "stage_ms": {
+      "model": 234.0,
+      "style": 0.6,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 401.3,
+     "cpu_ms": 2812.5,
+     "stage_ms": {
+      "model": 385.6,
+      "style": 0.5,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 207.0,
+     "cpu_ms": 2265.6,
+     "stage_ms": {
+      "model": 196.2,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 220.4,
+     "cpu_ms": 2453.1,
+     "stage_ms": {
+      "model": 207.3,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 183.5,
+     "cpu_ms": 2359.4,
+     "stage_ms": {
+      "model": 172.6,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 266.8,
+     "cpu_ms": 2250.0,
+     "stage_ms": {
+      "model": 255.8,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 245.6,
+     "cpu_ms": 2578.1,
+     "stage_ms": {
+      "model": 234.6,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 153.8,
+     "cpu_ms": 1859.4,
+     "stage_ms": {
+      "model": 141.5,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 227.7,
+     "cpu_ms": 2609.4,
+     "stage_ms": {
+      "model": 216.7,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 252.5,
+     "cpu_ms": 2406.2,
+     "stage_ms": {
+      "model": 241.4,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    }
+   ],
+   "c4": {
+    "good": 8,
+    "pass": true,
+    "detail": [
+     {
+      "case": "no text",
+      "status": 400,
+      "error": "missing_text",
+      "logged_status": 400,
+      "logged_error": "missing_text",
+      "ok": true
+     },
+     {
+      "case": "text null",
+      "status": 400,
+      "error": "missing_text",
+      "logged_status": 400,
+      "logged_error": "missing_text",
+      "ok": true
+     },
+     {
+      "case": "list body",
+      "status": 400,
+      "error": "missing_creator_id",
+      "logged_status": 400,
+      "logged_error": "missing_creator_id",
+      "ok": true
+     },
+     {
+      "case": "empty body",
+      "status": 400,
+      "error": "missing_creator_id",
+      "logged_status": 400,
+      "logged_error": "missing_creator_id",
+      "ok": true
+     },
+     {
+      "case": "25000 chars",
+      "status": 413,
+      "error": "text_too_long",
+      "logged_status": 413,
+      "logged_error": "text_too_long",
+      "ok": true
+     },
+     {
+      "case": "5000-char creator_id",
+      "status": 400,
+      "error": "creator_id_too_long",
+      "logged_status": 400,
+      "logged_error": "creator_id_too_long",
+      "ok": true
+     },
+     {
+      "case": "numeric creator_id",
+      "status": 400,
+      "error": "missing_creator_id",
+      "logged_status": 400,
+      "logged_error": "missing_creator_id",
+      "ok": true
+     },
+     {
+      "case": "lone surrogate creator_id",
+      "status": 400,
+      "error": "invalid_creator_id",
+      "logged_status": 400,
+      "logged_error": "invalid_creator_id",
+      "ok": true
+     }
+    ]
+   },
+   "c1": {
+    "sent": 20,
+    "lines": 20,
+    "complete": 20,
+    "pass": true,
+    "records": [
+     {
+      "route": "/submit",
+      "status": 200,
+      "error": null,
+      "duration_ms": 146.5
+     },
+     {
+      "route": "/submit",
+      "status": 200,
+      "error": null,
+      "duration_ms": 196.8
+     },
+     {
+      "route": "/submit",
+      "status": 200,
+      "error": null,
+      "duration_ms": 196.3
+     },
+     {
+      "route": "/submit",
+      "status": 200,
+      "error": null,
+      "duration_ms": 238.5
+     },
+     {
+      "route": "/submit",
+      "status": 200,
+      "error": null,
+      "duration_ms": 208.7
+     },
+     {
+      "route": "/submit",
+      "status": 200,
+      "error": null,
+      "duration_ms": 167.3
+     },
+     {
+      "route": "/submit",
+      "status": 200,
+      "error": null,
+      "duration_ms": 233.3
+     },
+     {
+      "route": "/submit",
+      "status": 200,
+      "error": null,
+      "duration_ms": 230.2
+     },
+     {
+      "route": "/submit",
+      "status": 200,
+      "error": null,
+      "duration_ms": 204.8
+     },
+     {
+      "route": "/submit",
+      "status": 200,
+      "error": null,
+      "duration_ms": 232.6
+     },
+     {
+      "route": "/submit",
+      "status": 400,
+      "error": "missing_text",
+      "duration_ms": 0.8
+     },
+     {
+      "route": "/submit",
+      "status": 400,
+      "error": "missing_text",
+      "duration_ms": 0.9
+     },
+     {
+      "route": "/submit",
+      "status": 400,
+      "error": "missing_creator_id",
+      "duration_ms": 0.8
+     },
+     {
+      "route": "/submit",
+      "status": 400,
+      "error": "missing_creator_id",
+      "duration_ms": 0.7
+     },
+     {
+      "route": "/submit",
+      "status": 413,
+      "error": "text_too_long",
+      "duration_ms": 1.0
+     },
+     {
+      "route": "/submit",
+      "status": 400,
+      "error": "creator_id_too_long",
+      "duration_ms": 1.0
+     },
+     {
+      "route": "/health",
+      "status": 200,
+      "error": null,
+      "duration_ms": 17.6
+     },
+     {
+      "route": "/health",
+      "status": 200,
+      "error": null,
+      "duration_ms": 7.4
+     },
+     {
+      "route": "/nope",
+      "status": 404,
+      "error": "http_404",
+      "duration_ms": 0.3
+     },
+     {
+      "route": "/nope",
+      "status": 404,
+      "error": "http_404",
+      "duration_ms": 0.2
+     }
+    ]
+   }
+  },
+  {
+   "trial": 2,
+   "c2": {
+    "health_after_s": 0.5,
+    "first_submit_ms": 4776.3,
+    "status": 200,
+    "pass": true,
+    "record": {
+     "timestamp": "2026-11-14T15:25:26+00:00",
+     "request_id": "0134e65bcfb8",
+     "method": "POST",
+     "route": "/submit",
+     "status": 200,
+     "input": {
+      "creator_id": "bef2_cold",
+      "text_chars": 496,
+      "text_words": 91,
+      "text_preview": "Four score and seven years ago our fathers brought forth on "
+     },
+     "output": {
+      "content_id": "6cfd63ff515f",
+      "guess": "unsure",
+      "label": "We can't tell for certain whether this was written by a pers",
+      "combined_score": 0.5945,
+      "status": "decided"
+     },
+     "duration_ms": 4776.3,
+     "cpu_ms": 7421.9,
+     "stage_ms": {
+      "model": 4763.7,
+      "style": 1.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     },
+     "error": null
+    }
+   },
+   "c3": {
+    "p95_ms": 228.3,
+    "median_ms": 220.0,
+    "max_ms": 228.6,
+    "ok": 20,
+    "pass": true
+   },
+   "_lat_rows": [
+    {
+     "duration_ms": 220.0,
+     "cpu_ms": 2796.9,
+     "stage_ms": {
+      "model": 196.2,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 177.0,
+     "cpu_ms": 2421.9,
+     "stage_ms": {
+      "model": 157.9,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 220.7,
+     "cpu_ms": 2671.9,
+     "stage_ms": {
+      "model": 199.4,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 221.9,
+     "cpu_ms": 2718.8,
+     "stage_ms": {
+      "model": 199.2,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 206.1,
+     "cpu_ms": 2406.2,
+     "stage_ms": {
+      "model": 186.2,
+      "style": 0.3,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 195.8,
+     "cpu_ms": 2281.2,
+     "stage_ms": {
+      "model": 171.9,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 220.1,
+     "cpu_ms": 2562.5,
+     "stage_ms": {
+      "model": 198.8,
+      "style": 0.3,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 205.8,
+     "cpu_ms": 2625.0,
+     "stage_ms": {
+      "model": 184.9,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 201.2,
+     "cpu_ms": 2468.8,
+     "stage_ms": {
+      "model": 180.9,
+      "style": 0.3,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 223.4,
+     "cpu_ms": 2906.2,
+     "stage_ms": {
+      "model": 205.2,
+      "style": 0.3,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 193.7,
+     "cpu_ms": 2484.4,
+     "stage_ms": {
+      "model": 174.1,
+      "style": 0.3,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 169.7,
+     "cpu_ms": 2234.4,
+     "stage_ms": {
+      "model": 149.0,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 225.5,
+     "cpu_ms": 2765.6,
+     "stage_ms": {
+      "model": 204.6,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 212.1,
+     "cpu_ms": 2625.0,
+     "stage_ms": {
+      "model": 192.2,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 171.9,
+     "cpu_ms": 2125.0,
+     "stage_ms": {
+      "model": 151.4,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 228.6,
+     "cpu_ms": 2531.2,
+     "stage_ms": {
+      "model": 207.9,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 225.4,
+     "cpu_ms": 2750.0,
+     "stage_ms": {
+      "model": 204.5,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 186.6,
+     "cpu_ms": 2375.0,
+     "stage_ms": {
+      "model": 166.5,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 220.0,
+     "cpu_ms": 2593.8,
+     "stage_ms": {
+      "model": 199.6,
+      "style": 0.3,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 228.3,
+     "cpu_ms": 2656.2,
+     "stage_ms": {
+      "model": 201.8,
+      "style": 2.3,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    }
+   ],
+   "c5": {
+    "a_ok": 10,
+    "b_ok": 9,
+    "both": 9,
+    "pass": false,
+    "mean_duration_ms": 200.7,
+    "mean_cpu_ms": 2409.4,
+    "rss_mb": null,
+    "sample": [
+     {
+      "timestamp": "2026-11-14T15:25:31+00:00",
+      "request_id": "f2fe9260cdd6",
+      "method": "POST",
+      "route": "/submit",
+      "status": 200,
+      "input": {
+       "creator_id": "bef2_f0",
+       "text_chars": 496,
+       "text_words": 91,
+       "text_preview": "Four score and seven years ago our fathers brought forth on "
+      },
+      "output": {
+       "content_id": "765cae1d2cb5",
+       "guess": "unsure",
+       "label": "We can't tell for certain whether this was written by a pers",
+       "combined_score": 0.5945,
+       "status": "decided"
+      },
+      "duration_ms": 203.8,
+      "cpu_ms": 2406.2,
+      "stage_ms": {
+       "model": 176.8,
+       "style": 0.4,
+       "phrase": 0.1,
+       "combine": 0.0
+      },
+      "error": null
+     },
+     {
+      "timestamp": "2026-11-14T15:25:31+00:00",
+      "request_id": "5521b60cfcef",
+      "method": "POST",
+      "route": "/submit",
+      "status": 200,
+      "input": {
+       "creator_id": "bef2_f1",
+       "text_chars": 533,
+       "text_words": 110,
+       "text_preview": "I went to the woods because I wished to live deliberately, t"
+      },
+      "output": {
+       "content_id": "faa9f18e3177",
+       "guess": "unsure",
+       "label": "We can't tell for certain whether this was written by a pers",
+       "combined_score": 0.6038,
+       "status": "decided"
+      },
+      "duration_ms": 201.0,
+      "cpu_ms": 2437.5,
+      "stage_ms": {
+       "model": 189.7,
+       "style": 0.4,
+       "phrase": 0.1,
+       "combine": 0.0
+      },
+      "error": null
+     }
+    ]
+   },
+   "_fid_rows": [
+    {
+     "duration_ms": 203.8,
+     "cpu_ms": 2406.2,
+     "stage_ms": {
+      "model": 176.8,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 201.0,
+     "cpu_ms": 2437.5,
+     "stage_ms": {
+      "model": 189.7,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 230.9,
+     "cpu_ms": 2375.0,
+     "stage_ms": {
+      "model": 221.1,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 182.3,
+     "cpu_ms": 2171.9,
+     "stage_ms": {
+      "model": 172.2,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 196.8,
+     "cpu_ms": 2453.1,
+     "stage_ms": {
+      "model": 185.3,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 222.8,
+     "cpu_ms": 2781.2,
+     "stage_ms": {
+      "model": 212.7,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 186.4,
+     "cpu_ms": 2375.0,
+     "stage_ms": {
+      "model": 176.7,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 180.3,
+     "cpu_ms": 2250.0,
+     "stage_ms": {
+      "model": 170.6,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 209.1,
+     "cpu_ms": 2468.8,
+     "stage_ms": {
+      "model": 198.9,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 193.1,
+     "cpu_ms": 2375.0,
+     "stage_ms": {
+      "model": 183.1,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    }
+   ],
+   "c4": {
+    "good": 8,
+    "pass": true,
+    "detail": [
+     {
+      "case": "no text",
+      "status": 400,
+      "error": "missing_text",
+      "logged_status": 400,
+      "logged_error": "missing_text",
+      "ok": true
+     },
+     {
+      "case": "text null",
+      "status": 400,
+      "error": "missing_text",
+      "logged_status": 400,
+      "logged_error": "missing_text",
+      "ok": true
+     },
+     {
+      "case": "list body",
+      "status": 400,
+      "error": "missing_creator_id",
+      "logged_status": 400,
+      "logged_error": "missing_creator_id",
+      "ok": true
+     },
+     {
+      "case": "empty body",
+      "status": 400,
+      "error": "missing_creator_id",
+      "logged_status": 400,
+      "logged_error": "missing_creator_id",
+      "ok": true
+     },
+     {
+      "case": "25000 chars",
+      "status": 413,
+      "error": "text_too_long",
+      "logged_status": 413,
+      "logged_error": "text_too_long",
+      "ok": true
+     },
+     {
+      "case": "5000-char creator_id",
+      "status": 400,
+      "error": "creator_id_too_long",
+      "logged_status": 400,
+      "logged_error": "creator_id_too_long",
+      "ok": true
+     },
+     {
+      "case": "numeric creator_id",
+      "status": 400,
+      "error": "missing_creator_id",
+      "logged_status": 400,
+      "logged_error": "missing_creator_id",
+      "ok": true
+     },
+     {
+      "case": "lone surrogate creator_id",
+      "status": 400,
+      "error": "invalid_creator_id",
+      "logged_status": 400,
+      "logged_error": "invalid_creator_id",
+      "ok": true
+     }
+    ]
+   },
+   "c1": {
+    "sent": 20,
+    "lines": 20,
+    "complete": 20,
+    "pass": true,
+    "records": [
+     {
+      "route": "/submit",
+      "status": 200,
+      "error": null,
+      "duration_ms": 150.1
+     },
+     {
+      "route": "/submit",
+      "status": 200,
+      "error": null,
+      "duration_ms": 205.5
+     },
+     {
+      "route": "/submit",
+      "status": 200,
+      "error": null,
+      "duration_ms": 204.1
+     },
+     {
+      "route": "/submit",
+      "status": 200,
+      "error": null,
+      "duration_ms": 237.5
+     },
+     {
+      "route": "/submit",
+      "status": 200,
+      "error": null,
+      "duration_ms": 213.6
+     },
+     {
+      "route": "/submit",
+      "status": 200,
+      "error": null,
+      "duration_ms": 164.4
+     },
+     {
+      "route": "/submit",
+      "status": 200,
+      "error": null,
+      "duration_ms": 231.4
+     },
+     {
+      "route": "/submit",
+      "status": 200,
+      "error": null,
+      "duration_ms": 232.2
+     },
+     {
+      "route": "/submit",
+      "status": 200,
+      "error": null,
+      "duration_ms": 192.1
+     },
+     {
+      "route": "/submit",
+      "status": 200,
+      "error": null,
+      "duration_ms": 237.1
+     },
+     {
+      "route": "/submit",
+      "status": 400,
+      "error": "missing_text",
+      "duration_ms": 0.9
+     },
+     {
+      "route": "/submit",
+      "status": 400,
+      "error": "missing_text",
+      "duration_ms": 0.6
+     },
+     {
+      "route": "/submit",
+      "status": 400,
+      "error": "missing_creator_id",
+      "duration_ms": 0.9
+     },
+     {
+      "route": "/submit",
+      "status": 400,
+      "error": "missing_creator_id",
+      "duration_ms": 0.9
+     },
+     {
+      "route": "/submit",
+      "status": 413,
+      "error": "text_too_long",
+      "duration_ms": 0.9
+     },
+     {
+      "route": "/submit",
+      "status": 400,
+      "error": "creator_id_too_long",
+      "duration_ms": 0.7
+     },
+     {
+      "route": "/health",
+      "status": 200,
+      "error": null,
+      "duration_ms": 13.2
+     },
+     {
+      "route": "/health",
+      "status": 200,
+      "error": null,
+      "duration_ms": 8.8
+     },
+     {
+      "route": "/nope",
+      "status": 404,
+      "error": "http_404",
+      "duration_ms": 0.2
+     },
+     {
+      "route": "/nope",
+      "status": 404,
+      "error": "http_404",
+      "duration_ms": 0.2
+     }
+    ]
+   }
+  },
+  {
+   "trial": 3,
+   "c2": {
+    "health_after_s": 0.5,
+    "first_submit_ms": 4561.7,
+    "status": 200,
+    "pass": true,
+    "record": {
+     "timestamp": "2026-11-14T15:25:46+00:00",
+     "request_id": "398caa73431b",
+     "method": "POST",
+     "route": "/submit",
+     "status": 200,
+     "input": {
+      "creator_id": "bef3_cold",
+      "text_chars": 496,
+      "text_words": 91,
+      "text_preview": "Four score and seven years ago our fathers brought forth on "
+     },
+     "output": {
+      "content_id": "e5936f63e2c0",
+      "guess": "unsure",
+      "label": "We can't tell for certain whether this was written by a pers",
+      "combined_score": 0.5945,
+      "status": "decided"
+     },
+     "duration_ms": 4561.7,
+     "cpu_ms": 7421.9,
+     "stage_ms": {
+      "model": 4548.4,
+      "style": 1.2,
+      "phrase": 0.1,
+      "combine": 0.0
+     },
+     "error": null
+    }
+   },
+   "c3": {
+    "p95_ms": 255.8,
+    "median_ms": 215.3,
+    "max_ms": 280.0,
+    "ok": 20,
+    "pass": true
+   },
+   "_lat_rows": [
+    {
+     "duration_ms": 216.3,
+     "cpu_ms": 2609.4,
+     "stage_ms": {
+      "model": 192.3,
+      "style": 0.3,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 199.7,
+     "cpu_ms": 2406.2,
+     "stage_ms": {
+      "model": 172.7,
+      "style": 0.3,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 232.3,
+     "cpu_ms": 2843.8,
+     "stage_ms": {
+      "model": 211.0,
+      "style": 0.3,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 217.3,
+     "cpu_ms": 2609.4,
+     "stage_ms": {
+      "model": 196.0,
+      "style": 0.3,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 204.3,
+     "cpu_ms": 2531.2,
+     "stage_ms": {
+      "model": 184.0,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 203.7,
+     "cpu_ms": 2359.4,
+     "stage_ms": {
+      "model": 183.0,
+      "style": 0.3,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 280.0,
+     "cpu_ms": 2921.9,
+     "stage_ms": {
+      "model": 255.2,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 215.3,
+     "cpu_ms": 2656.2,
+     "stage_ms": {
+      "model": 189.6,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 169.2,
+     "cpu_ms": 1890.6,
+     "stage_ms": {
+      "model": 148.9,
+      "style": 0.3,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 222.1,
+     "cpu_ms": 2796.9,
+     "stage_ms": {
+      "model": 200.8,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 195.0,
+     "cpu_ms": 2562.5,
+     "stage_ms": {
+      "model": 172.3,
+      "style": 0.3,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 197.9,
+     "cpu_ms": 2468.8,
+     "stage_ms": {
+      "model": 177.1,
+      "style": 0.3,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 236.5,
+     "cpu_ms": 2750.0,
+     "stage_ms": {
+      "model": 213.2,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 213.4,
+     "cpu_ms": 2843.8,
+     "stage_ms": {
+      "model": 192.7,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 188.9,
+     "cpu_ms": 1984.4,
+     "stage_ms": {
+      "model": 165.4,
+      "style": 0.6,
+      "phrase": 0.2,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 255.8,
+     "cpu_ms": 2656.2,
+     "stage_ms": {
+      "model": 237.7,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 229.7,
+     "cpu_ms": 2828.1,
+     "stage_ms": {
+      "model": 205.9,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 192.2,
+     "cpu_ms": 2421.9,
+     "stage_ms": {
+      "model": 169.2,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 214.5,
+     "cpu_ms": 2546.9,
+     "stage_ms": {
+      "model": 191.9,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 230.9,
+     "cpu_ms": 2656.2,
+     "stage_ms": {
+      "model": 211.2,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    }
+   ],
+   "c5": {
+    "a_ok": 10,
+    "b_ok": 9,
+    "both": 9,
+    "pass": false,
+    "mean_duration_ms": 197.8,
+    "mean_cpu_ms": 2370.3,
+    "rss_mb": null,
+    "sample": [
+     {
+      "timestamp": "2026-11-14T15:25:51+00:00",
+      "request_id": "a38bd2ae8aeb",
+      "method": "POST",
+      "route": "/submit",
+      "status": 200,
+      "input": {
+       "creator_id": "bef3_f0",
+       "text_chars": 496,
+       "text_words": 91,
+       "text_preview": "Four score and seven years ago our fathers brought forth on "
+      },
+      "output": {
+       "content_id": "ee2b61829249",
+       "guess": "unsure",
+       "label": "We can't tell for certain whether this was written by a pers",
+       "combined_score": 0.5945,
+       "status": "decided"
+      },
+      "duration_ms": 186.3,
+      "cpu_ms": 2343.8,
+      "stage_ms": {
+       "model": 165.5,
+       "style": 0.3,
+       "phrase": 0.1,
+       "combine": 0.0
+      },
+      "error": null
+     },
+     {
+      "timestamp": "2026-11-14T15:25:52+00:00",
+      "request_id": "33a919c6918a",
+      "method": "POST",
+      "route": "/submit",
+      "status": 200,
+      "input": {
+       "creator_id": "bef3_f1",
+       "text_chars": 533,
+       "text_words": 110,
+       "text_preview": "I went to the woods because I wished to live deliberately, t"
+      },
+      "output": {
+       "content_id": "8e675e8d0fcc",
+       "guess": "unsure",
+       "label": "We can't tell for certain whether this was written by a pers",
+       "combined_score": 0.6038,
+       "status": "decided"
+      },
+      "duration_ms": 197.8,
+      "cpu_ms": 2171.9,
+      "stage_ms": {
+       "model": 186.0,
+       "style": 0.4,
+       "phrase": 0.1,
+       "combine": 0.0
+      },
+      "error": null
+     }
+    ]
+   },
+   "_fid_rows": [
+    {
+     "duration_ms": 186.3,
+     "cpu_ms": 2343.8,
+     "stage_ms": {
+      "model": 165.5,
+      "style": 0.3,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 197.8,
+     "cpu_ms": 2171.9,
+     "stage_ms": {
+      "model": 186.0,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 226.7,
+     "cpu_ms": 2515.6,
+     "stage_ms": {
+      "model": 216.5,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 182.4,
+     "cpu_ms": 2156.2,
+     "stage_ms": {
+      "model": 172.6,
+      "style": 0.3,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 165.4,
+     "cpu_ms": 2078.1,
+     "stage_ms": {
+      "model": 155.5,
+      "style": 0.3,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 227.9,
+     "cpu_ms": 2578.1,
+     "stage_ms": {
+      "model": 217.9,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 202.7,
+     "cpu_ms": 2609.4,
+     "stage_ms": {
+      "model": 192.8,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 183.1,
+     "cpu_ms": 2453.1,
+     "stage_ms": {
+      "model": 173.3,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 217.7,
+     "cpu_ms": 2453.1,
+     "stage_ms": {
+      "model": 207.6,
+      "style": 0.3,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    },
+    {
+     "duration_ms": 188.4,
+     "cpu_ms": 2343.8,
+     "stage_ms": {
+      "model": 178.3,
+      "style": 0.4,
+      "phrase": 0.1,
+      "combine": 0.0
+     }
+    }
+   ],
+   "c4": {
+    "good": 8,
+    "pass": true,
+    "detail": [
+     {
+      "case": "no text",
+      "status": 400,
+      "error": "missing_text",
+      "logged_status": 400,
+      "logged_error": "missing_text",
+      "ok": true
+     },
+     {
+      "case": "text null",
+      "status": 400,
+      "error": "missing_text",
+      "logged_status": 400,
+      "logged_error": "missing_text",
+      "ok": true
+     },
+     {
+      "case": "list body",
+      "status": 400,
+      "error": "missing_creator_id",
+      "logged_status": 400,
+      "logged_error": "missing_creator_id",
+      "ok": true
+     },
+     {
+      "case": "empty body",
+      "status": 400,
+      "error": "missing_creator_id",
+      "logged_status": 400,
+      "logged_error": "missing_creator_id",
+      "ok": true
+     },
+     {
+      "case": "25000 chars",
+      "status": 413,
+      "error": "text_too_long",
+      "logged_status": 413,
+      "logged_error": "text_too_long",
+      "ok": true
+     },
+     {
+      "case": "5000-char creator_id",
+      "status": 400,
+      "error": "creator_id_too_long",
+      "logged_status": 400,
+      "logged_error": "creator_id_too_long",
+      "ok": true
+     },
+     {
+      "case": "numeric creator_id",
+      "status": 400,
+      "error": "missing_creator_id",
+      "logged_status": 400,
+      "logged_error": "missing_creator_id",
+      "ok": true
+     },
+     {
+      "case": "lone surrogate creator_id",
+      "status": 400,
+      "error": "invalid_creator_id",
+      "logged_status": 400,
+      "logged_error": "invalid_creator_id",
+      "ok": true
+     }
+    ]
+   },
+   "c1": {
+    "sent": 20,
+    "lines": 20,
+    "complete": 20,
+    "pass": true,
+    "records": [
+     {
+      "route": "/submit",
+      "status": 200,
+      "error": null,
+      "duration_ms": 152.3
+     },
+     {
+      "route": "/submit",
+      "status": 200,
+      "error": null,
+      "duration_ms": 201.9
+     },
+     {
+      "route": "/submit",
+      "status": 200,
+      "error": null,
+      "duration_ms": 191.8
+     },
+     {
+      "route": "/submit",
+      "status": 200,
+      "error": null,
+      "duration_ms": 234.6
+     },
+     {
+      "route": "/submit",
+      "status": 200,
+      "error": null,
+      "duration_ms": 216.8
+     },
+     {
+      "route": "/submit",
+      "status": 200,
+      "error": null,
+      "duration_ms": 153.4
+     },
+     {
+      "route": "/submit",
+      "status": 200,
+      "error": null,
+      "duration_ms": 212.4
+     },
+     {
+      "route": "/submit",
+      "status": 200,
+      "error": null,
+      "duration_ms": 232.6
+     },
+     {
+      "route": "/submit",
+      "status": 200,
+      "error": null,
+      "duration_ms": 186.8
+     },
+     {
+      "route": "/submit",
+      "status": 200,
+      "error": null,
+      "duration_ms": 228.8
+     },
+     {
+      "route": "/submit",
+      "status": 400,
+      "error": "missing_text",
+      "duration_ms": 0.7
+     },
+     {
+      "route": "/submit",
+      "status": 400,
+      "error": "missing_text",
+      "duration_ms": 0.9
+     },
+     {
+      "route": "/submit",
+      "status": 400,
+      "error": "missing_creator_id",
+      "duration_ms": 0.6
+     },
+     {
+      "route": "/submit",
+      "status": 400,
+      "error": "missing_creator_id",
+      "duration_ms": 0.6
+     },
+     {
+      "route": "/submit",
+      "status": 413,
+      "error": "text_too_long",
+      "duration_ms": 1.3
+     },
+     {
+      "route": "/submit",
+      "status": 400,
+      "error": "creator_id_too_long",
+      "duration_ms": 1.0
+     },
+     {
+      "route": "/health",
+      "status": 200,
+      "error": null,
+      "duration_ms": 20.6
+     },
+     {
+      "route": "/health",
+      "status": 200,
+      "error": null,
+      "duration_ms": 9.4
+     },
+     {
+      "route": "/nope",
+      "status": 404,
+      "error": "http_404",
+      "duration_ms": 0.3
+     },
+     {
+      "route": "/nope",
+      "status": 404,
+      "error": "http_404",
+      "duration_ms": 0.1
+     }
+    ]
+   }
+  }
+ ]
+}
