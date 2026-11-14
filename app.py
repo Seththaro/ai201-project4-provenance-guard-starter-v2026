@@ -26,14 +26,17 @@ Routes:
     GET  /health      is the service up, and is the model loaded
 """
 
+import time
 import uuid
 
-from flask import Flask, jsonify, request
+from flask import Flask, g, jsonify, request
+from werkzeug.exceptions import HTTPException
 
 import audit
 import config
 import detector
 import phrases
+import reqlog
 import scoring
 import stylometry
 
@@ -121,6 +124,58 @@ if config.RATE_LIMITING_ENABLED:
         }), 429
 
 
+
+# ── Request log - CAPSTONE (shape A) ──────────────────────────────────────────
+# One structured record per request, written after the response is built, so a
+# refused, rate-limited or crashed request leaves a trace too. See reqlog.py.
+
+@app.before_request
+def _start_timer():
+    g.t0 = time.perf_counter()
+    g.cpu0 = time.process_time()
+    g.request_id = uuid.uuid4().hex[:12]
+    g.stage_ms = {}
+    g.error = None
+
+
+@app.after_request
+def _log_request(response):
+    try:
+        status = response.status_code
+        body = response.get_json(silent=True) if response.is_json else None
+        error = getattr(g, "error", None)
+        if error is None and status >= 400:
+            error = (body or {}).get("error") if isinstance(body, dict) else None
+            error = error or f"http_{status}"
+        record = {
+            "timestamp": audit._now(),
+            "request_id": getattr(g, "request_id", None),
+            "method": request.method,
+            "route": request.path,
+            "status": status,
+            "input": reqlog.summarize_input(request.get_json(silent=True)) if request.method == "POST" else {},
+            "output": reqlog.summarize_output(status, body),
+            "duration_ms": round((time.perf_counter() - g.t0) * 1000, 1),
+            "cpu_ms": round((time.process_time() - g.cpu0) * 1000, 1),
+            "stage_ms": getattr(g, "stage_ms", {}),
+            "error": error,
+        }
+        reqlog.write(record)
+        response.headers["X-Request-ID"] = record["request_id"]
+    except Exception:  # noqa: BLE001 - never let logging break a response
+        pass
+    return response
+
+
+@app.errorhandler(Exception)
+def _unhandled(exc):
+    """A crash answers in JSON and is recorded with its error, not just a bare 500."""
+    if isinstance(exc, HTTPException):
+        return exc
+    g.error = f"{type(exc).__name__}: {str(exc)[:120]}"
+    return jsonify({"error": "internal_error", "message": "The service hit an unexpected error."}), 500
+
+
 # ── The worked example. Already works. Don't edit. ────────────────────────────
 
 @app.post("/ping")
@@ -182,11 +237,20 @@ def _is_verified(creator_id: str) -> bool:
 
 def _score_text(text: str) -> dict:
     """Run all three signals and combine. Models load once and stay loaded."""
+    stage = getattr(g, "stage_ms", {})
+    t = time.perf_counter()
     model_score = detector.model_signal(text)
+    stage["model"] = round((time.perf_counter() - t) * 1000, 1)
+    t = time.perf_counter()
     style_score = stylometry.style_signal(text)
+    stage["style"] = round((time.perf_counter() - t) * 1000, 1)
+    t = time.perf_counter()
     phrase_score = phrases.phrase_signal(text)
+    stage["phrase"] = round((time.perf_counter() - t) * 1000, 1)
+    t = time.perf_counter()
     combined = scoring.combine_signals(model_score, style_score, phrase_score)
     guess, label = scoring.score_to_label(combined)
+    stage["combine"] = round((time.perf_counter() - t) * 1000, 1)
     return {
         "model_score": model_score,
         "style_score": style_score,
