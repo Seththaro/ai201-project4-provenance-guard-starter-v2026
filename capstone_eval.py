@@ -93,7 +93,7 @@ def start(warmup):
 def rss_mb(pid=None):
     """Working set of whichever process owns the listening port (the real server)."""
     try:
-        cmd = ("$p=(Get-NetTCPConnection -LocalPort 5000 -State Listen).OwningProcess|select -first 1;"
+        cmd = ("$p=(Get-NetTCPConnection -LocalPort 5000 | select -first 1).OwningProcess;"
                "(Get-Process -Id $p).WorkingSet64")
         r = subprocess.run(["powershell", "-NoProfile", "-c", cmd],
                            capture_output=True, text=True, timeout=20)
