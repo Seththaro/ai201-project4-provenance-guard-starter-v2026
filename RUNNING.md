@@ -30,7 +30,7 @@ On Windows use `curl.exe` on one line, or Git Bash. Every request, including ref
 
 | Variable | Default | Effect |
 |---|---|---|
-| `AI201_WARMUP` | see `config.py` | `1` loads gpt2 at startup so the first request is not the slow one |
+| `AI201_WARMUP` | `1` | `1` loads gpt2 at startup so the first request is not the slow one |
 | `AI201_RATE_LIMITS` | `1` | `0` turns the rate limiter off (used only for the load test) |
 
 **Not used:** `gunicorn` is pinned in `requirements.txt` but needs `fcntl`, so it does not run on Windows. On Linux or macOS `gunicorn app:app --bind 127.0.0.1:5000` serves the same app; I could not test that here. The rest of this file is the original unit 7 and 8 guide.

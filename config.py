@@ -48,7 +48,7 @@ DETECTOR_MAX_TOKENS = 400
 
 # Capstone: load the model when the service starts instead of on the first
 # request. Off = the first /submit pays the load.
-WARMUP_ON_START = os.getenv("AI201_WARMUP", "0") == "1"
+WARMUP_ON_START = os.getenv("AI201_WARMUP", "1") == "1"
 
 
 # ─── Scoring (Milestone 4) ───────────────────────────────────────────────────
