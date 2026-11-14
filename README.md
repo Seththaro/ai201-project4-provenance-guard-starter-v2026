@@ -809,3 +809,27 @@ Rows that differ between the runs (every other row has the same status and verdi
 ---
 
 📖 **How to run this project: [RUNNING.md](RUNNING.md)**
+
+
+## Capstone
+
+**What This Extends**
+
+Provenance Guard, the unit 7 and 8 system: a Flask service that scores text for AI authorship with three signals (local gpt2 perplexity, stylometry, stock phrases), labels it, and keeps an audit log of decisions. What is new this unit is an operational layer around it: a per-request structured log (`logs/requests.jsonl`) that records every request the service handles, including refused and crashed ones, with how long each stage took; a single documented start command with a model warm-up at startup; and a cost per run measured from that log. The detection logic, thresholds, weights and the audit log are not changed.
+
+**The Shape**
+
+Shape A, deploy and instrument. The extension is the run path, the instrumentation and the numbers that come out of it.
+
+Out of scope, decided before building:
+- I am not touching the signals, weights or thresholds. Detection quality was unit 8's problem and the 12 broken attacks stay broken.
+- I am not hosting it. `RUNNING.md` already works out that gpt2 plus torch cannot fit a 512 MB free tier, so this takes Path B (local, with a committed run record).
+- I am not adding a metrics dashboard, log shipping, or a database. A JSONL file is enough to answer the questions my criteria ask.
+
+**Stretch features I'm declaring before I build**
+
+1. A second measured improvement, with a third run log in the same table format.
+2. A latency breakdown: where the time goes across the stages of one run, measured.
+3. A load observation: the service at about ten times my normal rate, with what changed.
+
+I am not attempting "both run paths": hosting is ruled out above, so there is nothing to compare.

@@ -1,7 +1,7 @@
 """
 What my test runs. <- UNIT 8, MILESTONE 3
 
-Each of my five criteria (criteria.md) needs something run against it.
+Each of my five criteria (criteria_unit7.md) needs something run against it.
 `run_eval.py` runs every scenario here three times and saves the raw output to
 results/. `check_criteria.py` reads the same lists and turns them into the pass /
 fail numbers for the run log, and it also does the two things run_eval.py cannot:
@@ -57,7 +57,7 @@ BORDERLINE = [
     "So we finally tried that new ramen place downtown last night. The broth was great, really rich, but the wait was almost an hour and my feet were killing me by the end. I would go back, just not on a weekend. My brother ordered the spicy one and could not stop sweating, which was honestly the best part of the evening.",
 ]
 
-# Criterion 1: 10 human pieces, 5 of them plain. (criteria.md asks for at least 4.)
+# Criterion 1: 10 human pieces, 5 of them plain. (criteria_unit7.md asks for at least 4.)
 CRITERION_1_TEXTS = HUMAN_PLAIN + HUMAN_CLASSIC
 
 # Criterion 3(b): 20 real submissions across the range.

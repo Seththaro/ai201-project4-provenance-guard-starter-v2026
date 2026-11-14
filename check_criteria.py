@@ -12,7 +12,7 @@ the two things run_eval.py cannot: criterion 4 (an appeal needs a content_id
 from an earlier submission) and criterion 3(a), the sweep of score_to_label.
 
 It measures. It does not decide MET or MISSED; the verdict is written by hand
-against the target in criteria.md.
+against the target in criteria_unit7.md.
 """
 
 import argparse
