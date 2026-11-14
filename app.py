@@ -475,6 +475,13 @@ def main():
     print(f"  detector model:  {config.DETECTOR_MODEL}")
     print(f"  rate limiting:   {'ON' if config.RATE_LIMITING_ENABLED else 'off (unit 8)'}")
     print(f"  audit log:       {config.AUDIT_LOG}")
+    print(f"  request log:     {reqlog.REQUEST_LOG}")
+    if config.WARMUP_ON_START:
+        import time as _t
+        t = _t.perf_counter()
+        print(f"  warming up:      {detector.warm_up()} ({_t.perf_counter() - t:.1f}s)")
+    else:
+        print("  warm-up:         off (first /submit loads the model)")
     print()
     print("Check it's alive:")
     print(f'  curl -X POST http://{config.HOST}:{config.PORT}/ping \\')
