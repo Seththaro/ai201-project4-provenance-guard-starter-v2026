@@ -1,5 +1,42 @@
 # Running Provenance Guard
 
+## Capstone run path (Path B: local, with logs)
+
+**The one command** (from the repo root, with the venv active):
+
+```bash
+python app.py
+```
+
+It serves on `http://127.0.0.1:5000`. Check it with `GET /health`, then submit:
+
+```bash
+curl -X POST http://127.0.0.1:5000/submit -H "Content-Type: application/json" -d '{"text": "My name is Sam and I am eleven. I have a dog named Max. Max is brown and he likes to run. Every day after school I take him to the park.", "creator_id": "me"}'
+```
+
+On Windows use `curl.exe` on one line, or Git Bash. Every request, including refused and crashed ones, appends one JSON line to `logs/requests.jsonl` (see `reqlog.py`).
+
+**What the environment needs**
+
+| Need | Value |
+|---|---|
+| Python | 3.12.6 tested; 3.11 to 3.13 supported, not 3.14 |
+| Dependencies | `pip install -r requirements.txt` (flask, flask-limiter, requests, transformers, torch CPU 2.15.0 tested, gunicorn, certifi; all version-bounded in that file) |
+| Model file | `gpt2` from Hugging Face, about 550 MB, downloaded once by `python detector.py` into the Hugging Face cache |
+| Memory | about 1 GB resident once the model is loaded (measured, see README Instrumentation); the dev machine has 31.6 GB |
+| Port | 5000, or set `PORT`; `HOST` defaults to loopback |
+
+**Switches (environment variables)**
+
+| Variable | Default | Effect |
+|---|---|---|
+| `AI201_WARMUP` | see `config.py` | `1` loads gpt2 at startup so the first request is not the slow one |
+| `AI201_RATE_LIMITS` | `1` | `0` turns the rate limiter off (used only for the load test) |
+
+**Not used:** `gunicorn` is pinned in `requirements.txt` but needs `fcntl`, so it does not run on Windows. On Linux or macOS `gunicorn app:app --bind 127.0.0.1:5000` serves the same app; I could not test that here. The rest of this file is the original unit 7 and 8 guide.
+
+---
+
 Everything about how the starter works.
 
 This is a **web service**. It runs on your machine and you talk to it with
