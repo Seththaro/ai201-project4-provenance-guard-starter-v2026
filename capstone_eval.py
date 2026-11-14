@@ -54,7 +54,27 @@ def post(body=None, raw=None):
     return requests.post(f"{URL}/submit", json=body, timeout=120)
 
 
+def port_busy():
+    try:
+        requests.get(f"{URL}/health", timeout=2)
+        return True
+    except Exception:
+        return False
+
+
+def stop(proc):
+    """Kill the whole tree: the venv launcher on Windows leaves its child holding the port."""
+    subprocess.run(["taskkill", "/F", "/T", "/PID", str(proc.pid)], capture_output=True)
+    for _ in range(20):
+        if not port_busy():
+            return
+        time.sleep(0.5)
+    raise RuntimeError("port 5000 still answering after stop")
+
+
 def start(warmup):
+    if port_busy():
+        raise RuntimeError("something is already answering on port 5000; refusing to measure a stale server")
     env = dict(os.environ, AI201_DEBUG="0", AI201_WARMUP=warmup, AI201_RATE_LIMITS="1", PYTHONUTF8="1")
     (ROOT / "logs").mkdir(exist_ok=True)
     out = open(ROOT / "logs" / "server_stdout.txt", "w")
@@ -66,13 +86,16 @@ def start(warmup):
                 return proc, time.perf_counter() - t
         except Exception:
             time.sleep(0.5)
-    proc.terminate()
+    stop(proc)
     raise RuntimeError("service did not answer /health in 120s")
 
 
-def rss_mb(pid):
+def rss_mb(pid=None):
+    """Working set of whichever process owns the listening port (the real server)."""
     try:
-        r = subprocess.run(["powershell", "-NoProfile", "-c", f"(Get-Process -Id {pid}).WorkingSet64"],
+        cmd = ("$p=(Get-NetTCPConnection -LocalPort 5000 -State Listen).OwningProcess|select -first 1;"
+               "(Get-Process -Id $p).WorkingSet64")
+        r = subprocess.run(["powershell", "-NoProfile", "-c", cmd],
                            capture_output=True, text=True, timeout=20)
         return round(int(r.stdout.strip()) / 1e6)
     except Exception:
@@ -190,11 +213,7 @@ def trial(n, warmup, tag):
                      "pass": len(recs) == 20 and complete == 20,
                      "records": [{k: x.get(k) for k in ("route", "status", "error", "duration_ms")} for x in recs]}
     finally:
-        proc.terminate()
-        try:
-            proc.wait(timeout=15)
-        except Exception:
-            proc.kill()
+        stop(proc)
     return res
 
 
