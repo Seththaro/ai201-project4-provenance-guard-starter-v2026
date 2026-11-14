@@ -1,0 +1,48 @@
+{
+ "label": "load",
+ "rss_mb_after": 1025,
+ "phases": [
+  {
+   "phase": "normal",
+   "rate_per_min": 6,
+   "sent": 6,
+   "wall_s": 50.1,
+   "status_counts": {
+    "200": 6
+   },
+   "server_duration_ms": {
+    "median": 154.4,
+    "p95": 192.8,
+    "max": 192.8
+   },
+   "client_latency_ms": {
+    "median": 170.6,
+    "p95": 198.2,
+    "max": 198.2
+   },
+   "mean_cpu_ms": 1679.7,
+   "logged_requests": 6
+  },
+  {
+   "phase": "ten_times",
+   "rate_per_min": 60,
+   "sent": 60,
+   "wall_s": 59.2,
+   "status_counts": {
+    "200": 60
+   },
+   "server_duration_ms": {
+    "median": 168.4,
+    "p95": 227.3,
+    "max": 315.4
+   },
+   "client_latency_ms": {
+    "median": 182.9,
+    "p95": 232.5,
+    "max": 325.7
+   },
+   "mean_cpu_ms": 1633.1,
+   "logged_requests": 60
+  }
+ ]
+}
