@@ -833,3 +833,162 @@ Out of scope, decided before building:
 3. A load observation: the service at about ten times my normal rate, with what changed.
 
 I am not attempting "both run paths": hosting is ruled out above, so there is nothing to compare.
+
+
+**Running It**
+
+Path B, local with logs. Hosting is ruled out by arithmetic, not effort: torch plus the 550 MB gpt2 weights is about 1,000 MB resident (measured below: 993 to 1,025 MB) against the 512 MB of a free host, and a free host has no persistent disk, so the model would be downloaded again after every spin-down. I did not try a host. Start command, environment and switches are in [RUNNING.md](RUNNING.md): `python app.py` from the repo root.
+
+I tested RUNNING.md from a clean checkout: `git clone` into a new folder, then `PORT=5001 python app.py` using the existing venv and the already-downloaded gpt2 cache. `/health` answered after about 3 seconds, the startup banner showed "warming up: gpt2 loaded and ready. (5.3s)", and a `/submit` returned 200 and wrote a record to the clone's own `logs/requests.jsonl`. What that did not test: creating a fresh venv and running `pip install -r requirements.txt`, and the 550 MB download from an empty Hugging Face cache. Those steps are as the unit 7 setup had them. I also could not test the `gunicorn` line on Linux or macOS, because gunicorn needs `fcntl` and does not run on Windows.
+
+**Instrumentation**
+
+Every HTTP request writes one line to `logs/requests.jsonl` (`reqlog.py`, called from `app.py::_log_request` after the response is built, so refused, rate-limited and crashed requests are recorded too). Fields: `timestamp`, `request_id` (also returned as the `X-Request-ID` header), `method`, `route`, `status`, `input` (creator_id, text_chars, text_words, a 60-character preview, never the whole text), `output` (content_id, guess, label prefix, combined_score, or the error code), `duration_ms` (wall), `cpu_ms` (process CPU time during the request), `stage_ms` (model, style, phrase, combine) and `error`. A crash that is not an HTTP error is caught by `app.py::_unhandled`, answered as a JSON 500 and logged with the exception text. This is separate from the audit log, which records decisions.
+
+Ten entries, from `results/requests_extract_after2.jsonl` (the last trial of the final run, the 20-request mix of criterion 1, produced by `capstone_eval.py`). The first six are accepted submissions, the last four are failures: three refused inputs (`missing_text` 400, `text_too_long` 413, `creator_id_too_long` 400) and one request to a route that does not exist (404). They are pasted exactly as written.
+
+```json
+{"timestamp": "2026-11-14T15:28:46+00:00", "request_id": "ea728ded26bf", "method": "POST", "route": "/submit", "status": 200, "input": {"creator_id": "aft3_m0", "text_chars": 630, "text_words": 110, "text_preview": "Thanks for sending over the draft. I read through it twice a"}, "output": {"content_id": "9fb92eb06aed", "guess": "unsure", "label": "We can't tell for certain whether this was written by a pers", "combined_score": 0.4883, "status": "decided"}, "duration_ms": 122.8, "cpu_ms": 1234.4, "stage_ms": {"model": 121.3, "style": 0.3, "phrase": 0.1, "combine": 0.0}, "error": null}
+{"timestamp": "2026-11-14T15:28:47+00:00", "request_id": "54101f59d05f", "method": "POST", "route": "/submit", "status": 200, "input": {"creator_id": "aft3_m1", "text_chars": 577, "text_words": 110, "text_preview": "Honestly, remote work has changed how I think about my day. "}, "output": {"content_id": "817331934d4d", "guess": "unsure", "label": "We can't tell for certain whether this was written by a pers", "combined_score": 0.4672, "status": "decided"}, "duration_ms": 207.6, "cpu_ms": 2421.9, "stage_ms": {"model": 206.1, "style": 0.4, "phrase": 0.1, "combine": 0.0}, "error": null}
+{"timestamp": "2026-11-14T15:28:47+00:00", "request_id": "5af6e80ab5dd", "method": "POST", "route": "/submit", "status": 200, "input": {"creator_id": "aft3_m2", "text_chars": 535, "text_words": 110, "text_preview": "Social media has changed the way we comunicate in many ways."}, "output": {"content_id": "6d9b06c6ab5e", "guess": "unsure", "label": "We can't tell for certain whether this was written by a pers", "combined_score": 0.5467, "status": "decided"}, "duration_ms": 245.6, "cpu_ms": 2281.2, "stage_ms": {"model": 244.0, "style": 0.3, "phrase": 0.1, "combine": 0.0}, "error": null}
+{"timestamp": "2026-11-14T15:28:47+00:00", "request_id": "9be08aef41ab", "method": "POST", "route": "/submit", "status": 200, "input": {"creator_id": "aft3_m3", "text_chars": 597, "text_words": 110, "text_preview": "The city council voted on Tuesday to approve a new bike lane"}, "output": {"content_id": "c3d7abc55453", "guess": "unsure", "label": "We can't tell for certain whether this was written by a pers", "combined_score": 0.5078, "status": "decided"}, "duration_ms": 180.0, "cpu_ms": 2265.6, "stage_ms": {"model": 178.5, "style": 0.3, "phrase": 0.1, "combine": 0.0}, "error": null}
+{"timestamp": "2026-11-14T15:28:47+00:00", "request_id": "d42d45bfe317", "method": "POST", "route": "/submit", "status": 200, "input": {"creator_id": "aft3_m4", "text_chars": 522, "text_words": 107, "text_preview": "So we finally tried that new ramen place downtown last night"}, "output": {"content_id": "01d733a4e282", "guess": "unsure", "label": "We can't tell for certain whether this was written by a pers", "combined_score": 0.4724, "status": "decided"}, "duration_ms": 183.5, "cpu_ms": 2406.2, "stage_ms": {"model": 181.5, "style": 0.6, "phrase": 0.1, "combine": 0.0}, "error": null}
+{"timestamp": "2026-11-14T15:28:47+00:00", "request_id": "67b6036c4e6c", "method": "POST", "route": "/submit", "status": 200, "input": {"creator_id": "aft3_m5", "text_chars": 436, "text_words": 100, "text_preview": "My name is Sam and I am eleven. I have a dog named Max. Max "}, "output": {"content_id": "3881d569b335", "guess": "unsure", "label": "We can't tell for certain whether this was written by a pers", "combined_score": 0.5978, "status": "decided"}, "duration_ms": 214.2, "cpu_ms": 2875.0, "stage_ms": {"model": 212.8, "style": 0.3, "phrase": 0.1, "combine": 0.0}, "error": null}
+{"timestamp": "2026-11-14T15:28:48+00:00", "request_id": "3b78d0db7712", "method": "POST", "route": "/submit", "status": 400, "input": {"creator_id": "b1"}, "output": {"error": "missing_text"}, "duration_ms": 1.0, "cpu_ms": 0.0, "stage_ms": {}, "error": "missing_text"}
+{"timestamp": "2026-11-14T15:28:48+00:00", "request_id": "486b284749bf", "method": "POST", "route": "/submit", "status": 413, "input": {"creator_id": "b5", "text_chars": 25000, "text_words": 5000, "text_preview": "word word word word word word word word word word word word "}, "output": {"error": "text_too_long"}, "duration_ms": 0.9, "cpu_ms": 0.0, "stage_ms": {}, "error": "text_too_long"}
+{"timestamp": "2026-11-14T15:28:48+00:00", "request_id": "4c1979a9ae3c", "method": "POST", "route": "/submit", "status": 400, "input": {"creator_id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", "text_chars": 533, "text_words": 110, "text_preview": "I went to the woods because I wished to live deliberately, t"}, "output": {"error": "creator_id_too_long"}, "duration_ms": 0.7, "cpu_ms": 0.0, "stage_ms": {}, "error": "creator_id_too_long"}
+{"timestamp": "2026-11-14T15:28:48+00:00", "request_id": "2462f7a9433c", "method": "GET", "route": "/nope", "status": 404, "input": {}, "output": {}, "duration_ms": 0.2, "cpu_ms": 0.0, "stage_ms": {}, "error": "http_404"}
+```
+
+No request in the final runs ended as a 500, so the failure entries above are rejections (400, 413, 404), not crashes. The crash path itself, `app.py::_unhandled`, has not been exercised by any test of mine: the one input that used to crash the route (the lone-surrogate `creator_id`) became a 400 in unit 8, so I have never seen a real 500 recorded by it.
+
+**What It Costs**
+
+Measured on the final system (warm-up on) over the 30 warm submissions of criterion 5, three trials of ten, each a 91 to 110 word text, one request at a time on this laptop (31.6 GB RAM, CPU only, no GPU):
+
+| Measure | Mean per run |
+|---|---|
+| Wall time (`duration_ms`) | 191 ms |
+| CPU time (`cpu_ms`, summed over all threads) | 2,272 ms |
+| Resident memory of the service | 993 MB |
+| API spend | $0 (gpt2 runs locally, no hosted call) |
+
+How: `app.py::_log_request` records `time.perf_counter()` and `time.process_time()` deltas for every request; `capstone_eval.py` sends the ten, then reads the log. Memory is the working set of the process that owns port 5000, read with PowerShell after the ten runs. The first one is not a pricing-page number; it is the mean of the log's own `duration_ms` values. CPU time is about twelve times wall time because torch runs the model across several cores at once, so wall time is what a user waits and CPU time is what a shared machine would be billed.
+
+For a hundred people a day, assuming each submits 3 pieces (my assumption, not measured): 100 x 3 = 300 runs. Wall: 300 x 0.191 s = 57 s of waiting in total. CPU: 300 x 2.272 s = 682 CPU-seconds, about 11 CPU-minutes. API: 300 x $0 = $0. Memory does not scale with runs: it is about 1 GB the whole time the service is up, which is why the deploy question was answered by memory and not by run cost. This assumes one request at a time; section "Load observation" below covers more.
+
+**Run Log and Verdicts** (before any change)
+
+Criteria are in `criteria.md`. Three trials each, service restarted for each trial. File: `results/capstone_2026-11-14_1025_before.md`. Warm-up off, as the system was after the build.
+
+| Criterion | Target | Run 1 | Run 2 | Run 3 | Verdict |
+|---|---|---|---|---|---|
+| 1. Every request leaves a complete record | 20 of 20 | 20/20 | 20/20 | 20/20 | MET |
+| 2. Cold first submit under 5 s | < 5000 ms, health < 60 s | 4739 ms | 4776 ms | 4562 ms | MET (by 5 to 9%) |
+| 3. Warm p95 of 20 under 2 s | p95 < 2000 ms, 20/20 OK | p95 314 ms | p95 228 ms | p95 256 ms | MET |
+| 4. Bad input: JSON 4xx, logged with error | 8 of 8 | 8/8 | 8/8 | 8/8 | MET |
+| 5. Log matches response, stages add up | 10 of 10 | 9/10 | 9/10 | 9/10 | MISSED |
+
+Real output for each criterion is in the `.md` file above; the lines that matter, trial 1:
+
+Criterion 2, first submit after start (`app.py::_log_request`, stage from `app.py::_score_text`):
+```json
+{"route": "/submit", "status": 200, "duration_ms": 4739.2, "cpu_ms": 7312.5, "stage_ms": {"model": 4729.7, "style": 1.2, "phrase": 0.1, "combine": 0.0}, "error": null}
+```
+Criterion 5, the first of the ten records, 265.1 ms wall and 234.7 ms in the four timed stages (ratio 0.89, under the 0.90 target):
+```json
+{"route": "/submit", "status": 200, "duration_ms": 265.1, "cpu_ms": 2546.9, "stage_ms": {"model": 234.0, "style": 0.6, "phrase": 0.1, "combine": 0.0}, "error": null}
+```
+Criterion 4, all eight cases returned a JSON 4xx whose `error` matched the logged `error` (`app.py::_check_text` and `_error`): no text and null text as `missing_text` 400; list body, empty body and numeric `creator_id` as `missing_creator_id` 400; the 25,000-character text as `text_too_long` 413; the 5,000-character `creator_id` as `creator_id_too_long` 400; the lone surrogate as `invalid_creator_id` 400. Criterion 1: 20 lines for 20 requests, every one with all seven required fields. Criterion 3, trial 1 durations in `results/capstone_2026-11-14_1025_before.json` (`_lat_rows`).
+
+**One result I threw away.** My first before run was invalid and was never committed. An earlier smoke-test server of mine was still listening on port 5000, so every "fresh start" was answered by it: the table showed `health 0.0 s`, a 220 ms "cold" submit in trials 2 and 3, and a 4 MB memory reading from a process that had failed to bind. `capstone_eval.py` now refuses to start if port 5000 already answers, and kills the whole process tree (the venv launcher on Windows leaves its child holding the port when only the launcher is terminated). The numbers above are from the rerun.
+
+**Verdicts and diagnoses**
+
+Criterion 5 MISSED, in all three trials, always for the same reason: one record in ten had a stage total under 90% of its wall time. The stage is the route, `app.py::submit`, not any signal. Three of the four timed stages are tiny and the model stage is steady, so the gap was work I had not timed. The first record of each batch had 20 to 30 ms outside the timed stages (265.1 vs 234.7, 203.8 vs 177.3, 186.3 vs 165.9) against about 10 ms for the others. I measured one cause in isolation: `app.py::_is_verified` re-reads and parses the entire `logs/audit.jsonl` on every submission to look for a credential, which took 5.3 ms at 1,633 entries (676 KB) and grows with the log. Mean time outside the four stages across all 90 timed submissions was 18.1 ms. I did not separately time the audit-log write or the response encoding, and I do not have a measured reason why the first record of each batch was worse than the rest; it may be file caching after my script emptied the request log, but that is a guess.
+
+Criterion 2 was MET, but barely, and I do not trust it. Cold submits took 4.56 to 4.78 s, and 4.73 s of the 4.74 s in trial 1 is the model stage: `detector._load` runs inside the first request. The unit 7 first-run measurement was 21.8 s, because the model files had to come off disk; in the trials they were in the operating system's file cache. A real first start after a reboot would miss this by a wide margin, so this target was met under the friendliest conditions I could give it, and I would not call it met for a user. It is the criterion I would tighten (see What's Still Broken).
+
+Pattern: one miss and one near-miss, and they are different problems. The miss is untimed work in the route that grows with the log. The near-miss is the model load happening inside a request. Criteria 1, 3 and 4 are met with room: p95 is 228 to 314 ms against 2000 ms, so I set criterion 3 far too loose (see What's Still Broken).
+
+**The Improvement**
+
+**What I changed:** `app.py::_is_verified` now builds the set of verified creators from the audit log once, keeps it in memory, and `app.py::verify` adds to it when a credential is granted. One change in one function.
+
+**Which diagnosis pointed at it:** the criterion 5 miss. `_is_verified` was the one untimed cost I measured at 5.3 ms, it scales with the length of the audit log, and it was the largest piece of the 18 ms of time outside the four timed stages.
+
+Before (`results/capstone_2026-11-14_1025_before.md`) and after (`results/capstone_2026-11-14_1027_after.md`), warm-up off in both so only this change differs:
+
+| Criterion | Target | Before R1 / R2 / R3 | After R1 / R2 / R3 | Verdict before | Verdict after |
+|---|---|---|---|---|---|
+| 1. Complete record per request | 20 of 20 | 20 / 20 / 20 | 20 / 20 / 20 | MET | MET |
+| 2. Cold first submit | < 5000 ms | 4739 / 4776 / 4562 | 4750 / **5318** / 4851 | MET | MISSED |
+| 3. Warm p95 | < 2000 ms | 314 / 228 / 256 | 271 / 245 / 239 | MET | MET |
+| 4. Bad input handled and logged | 8 of 8 | 8 / 8 / 8 | 8 / 8 / 8 | MET | MET |
+| 5. Log matches, stages add up | 10 of 10 | 9 / 9 / 9 | 10 / 10 / 10 | MISSED | MET |
+
+**Did it help, and how do I know:** Yes for what it targeted. Criterion 5 went from 9/10 to 10/10 in all three trials, the lowest stage-to-wall ratio went from 0.87 to 0.99, and the mean time outside the four stages dropped from 18.1 ms to 1.3 ms over 90 submissions. What it cost: nothing I measured, with one real behaviour change: a credential granted by editing the audit log file by hand while the service is running is no longer noticed until a restart. The criterion 2 flip from MET to MISSED is not caused by this change, since it does not touch model loading: run 2's 5318 ms is ordinary spread on a cold load that was already within 5 to 9% of the limit, and it is the clearest evidence for the near-miss diagnosis above. The `after` result for criterion 2 is therefore a real miss of my own target, and I report it as one.
+
+**Second improvement** (stretch, declared at the top of this section)
+
+**What I changed:** `config.py::WARMUP_ON_START` now defaults to on, and `app.py::main` calls `detector.warm_up()` before the server starts accepting requests, so the model is loaded at startup and not inside the first request.
+
+**Which diagnosis pointed at it:** criterion 2, the near-miss and then the miss: the first submit's 4.7 s was the model stage, `detector._load`.
+
+Run log, third set (`results/capstone_2026-11-14_1028_after2.md`), same table format:
+
+| Criterion | Target | Run 1 | Run 2 | Run 3 | Verdict |
+|---|---|---|---|---|---|
+| 1. Complete record per request | 20 of 20 | 20/20 | 20/20 | 20/20 | MET |
+| 2. Cold first submit | < 5000 ms, health < 60 s | 308 ms, health 5.0 s | 318 ms, health 5.0 s | 299 ms, health 5.6 s | MET |
+| 3. Warm p95 | p95 < 2000 ms | p95 240 ms | p95 223 ms | p95 265 ms | MET |
+| 4. Bad input | 8 of 8 | 8/8 | 8/8 | 8/8 | MET |
+| 5. Log matches | 10 of 10 | 10/10 | 10/10 | 10/10 | MET |
+
+**Did it help:** Yes. The first submit fell from 4.6 to 5.3 s down to about 0.3 s, and all five criteria are met in all three trials. The trade is named in the table: the load did not disappear, it moved to before the service is reachable, so `/health` now answers 5.0 to 5.6 s after launch instead of 0.5 s. A health check with a timeout under about 6 seconds would now report the service down during startup, where before it would pass and the first user would hang. I think that is the right trade, but it is a trade. Same caveat as above: the model files were in the operating system's cache, so on a true first start the 5 seconds would be around 20.
+
+**Latency breakdown** (stretch, declared at the top of this section)
+
+Measured from `stage_ms` in the request log, final system, mean over the 60 warm submissions of criterion 3 and the 30 of criterion 5 (90 in all; `results/capstone_2026-11-14_1028_after2.json`):
+
+| Stage | Mean ms | Share of 196.4 ms |
+|---|---|---|
+| Model signal (gpt2 forward pass, `detector.model_signal`) | 194.7 | 99.1% |
+| Style signal (`stylometry.style_signal`) | 0.41 | 0.2% |
+| Phrase signal (`phrases.phrase_signal`) | 0.10 | 0.05% |
+| Combine and label (`scoring`) | 0.00 | 0% |
+| Everything else (validation, audit write, JSON) | 1.2 | 0.6% |
+
+The model stage dominates by a factor of about 500 over the other two signals together. Anything I do to latency has to go through gpt2 (a smaller model, a shorter `DETECTOR_MAX_TOKENS`, or caching by text hash); touching the stylometry or the route cannot move it. The cold start is the same stage: 4,730 ms of 4,739 ms before warm-up.
+
+**Load observation** (stretch, declared at the top of this section)
+
+`load_test.py`, `results/load_2026-11-14_1030_load.json`. Normal rate is my definition of a real writer: one submission every 10 seconds, 6 a minute, for 50 seconds (6 requests). Ten times that is 60 a minute, one arrival a second for 60 seconds (60 requests), each under its own `creator_id`, sent whether or not the previous one had finished. Final system, warm-up on, rate limiting on.
+
+| | Normal (6/min) | Ten times (60/min) |
+|---|---|---|
+| Requests sent, all 200 | 6 | 60 |
+| Server median / p95 / max (ms) | 154 / 193 / 193 | 168 / 227 / 315 |
+| Client median / p95 / max (ms) | 171 / 198 / 198 | 183 / 233 / 326 |
+| Mean CPU per request (ms) | 1,680 | 1,633 |
+| Errors, 429s | 0 | 0 |
+| Resident memory after | | 1,025 MB |
+
+What changed: latency rose about 9% at the median and 63% at the maximum (193 to 315 ms), and nothing else did. No errors, no rate-limit rejections (each arrival was a different creator), and CPU per request did not move. The honest limit of this result: at 60 a minute each request takes about 170 ms, so the service was busy about 17% of the time and never queued. It tells me 10x of a single writer's pace is nothing for this machine; it does not tell me where it breaks. If requests ran one at a time, saturation would be roughly 5 or 6 a second (1 / 0.17 s); that is an estimate and I did not run it.
+
+**What's Still Broken**
+
+Final state: all five criteria met in all three trials (after2). Nothing is left missed, so this section is about targets set too low, and about what I did not test.
+
+- **Criterion 3 was set far too loose.** p95 of 223 to 265 ms against a target of 2000 ms is a factor of eight. I wrote 2 seconds from my unit 7 note that a warm request takes "a second or two", and that note was wrong for this machine. I would tighten it to p95 under 400 ms, which the three trials would still meet (the worst p95 so far is 314 ms) but a regression to an untimed 100 ms stage would not.
+- **Criterion 2 should be two criteria.** The target of 5 s was met only because gpt2 was in the file cache. I would split it: the first submit after start under 1 s (met at about 0.3 s), and `/health` reachable within 10 s of launch with the files cold, which I have not measured and expect to fail (about 20 s on a true first start).
+- **Criterion 5(b) is checked at 90%, and now every record is at 98% or better.** I would tighten it to 95%.
+- Not tested: gunicorn on Linux or macOS, a fresh `pip install`, a first-ever model download, a request that crashes the service (no 500 occurred in the final runs), and anything above one request a second. The attack set from unit 8 was not re-run: I changed `_is_verified` and the startup path, not scoring, so I expect the 44 held and 12 broken to be unchanged, but I did not check.
+
+If I had another unit I would do one thing first: run the cold-file-cache start and write the real first-start number into criterion 2. It is the only measurement in this unit where the condition I tested is easier than the one a user meets, and it decides whether `/health` timeouts matter. The attack-set re-run would be second because it is cheap and would settle the one claim above that I am only expecting.
+
+**How I Used AI**
+
+**Moment 1: the first before run looked fine and was not.** I asked Claude to run the five criteria against the service. The first table it produced showed a cold start of 220 ms in two of three trials, with `health 0.0 s` and 4 MB of memory, which cannot be a service that had just loaded a 550 MB model. Claude checked port 5000 and found two leftover processes from our own smoke test still serving, so the runs had measured them. It changed the runner to refuse to start when the port already answers and to kill the whole process tree on stop (the venv launcher on Windows leaves its child behind), and we discarded that run without committing it and reran. Had that table been accepted, criterion 2 would have been reported as met by a wide margin.
+
+**Moment 2: asking where the missing time was before changing anything.** After criterion 5 missed I asked what the unaccounted milliseconds were, not what to fix. Claude timed `_is_verified` against the real audit log (5.3 ms at 1,633 entries) and compared the mean gap in the request log (18.1 ms). I chose the change (cache the set, leave the criterion's four named stages alone, rather than adding timers for the leftover work so the sum would pass) and kept the write-up to what was measured: it says the cache removed most of the gap, and says plainly that the audit-log write was never timed and that the first record of each batch being worse is unexplained.
